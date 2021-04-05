@@ -14,9 +14,10 @@ class Obstacles {
     if (dist(obstacleX, obstacleY, playerX, playerY) > 100) {
       return false
     } else {
-      game.player.health -= 20
+      game.player.health -= 20;
       if (game.player.health <= 0) {
-        window.alert('GAME OVER!')
+        // window.alert('GAME OVER!')
+        // rect(0, 0, 40, 40)
       }
       return true
     }
@@ -24,6 +25,6 @@ class Obstacles {
   draw() {
     // rect(this.x, this.y, this.width, this.height);
     image(game.obstacleImage, this.x, this.y, this.width, this.height);
-    this.x -= 5;
+    this.x -= 8;
   }
 }

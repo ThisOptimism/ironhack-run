@@ -12,12 +12,7 @@ function preload() {
 
 function draw() {
   clear();
-  background('grey')
-
-  game.drawObstacles();
-  game.drawFirstAid();
   game.draw();
-
 }
 
 function keyPressed() {

@@ -15,21 +15,13 @@ class Player {
 
   }
   draw() {
-
-    // push()
-    // rect(this.x, 450, 50, 100)
-    // pop()
-
     if (keyIsDown(65) && this.x >= 5) this.moveLeft();
-    if (keyIsDown(68) && this.x <= 450) this.moveRight();
+    if (keyIsDown(68) && this.x <= 900) this.moveRight();
 
     //  gravity
     this.velocity += this.gravity;
     this.y += this.velocity;
     this.y += this.gravity
-    // if (this.y >= height - this.height) {
-    //   this.y = height - this.height
-    // }
     this.y = constrain(this.y, 0, height - this.height - 30)
 
     image(game.playerImage, this.x, this.y, this.width, this.height)
