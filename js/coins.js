@@ -23,7 +23,7 @@ class Coin {
     if (dist(coinX, coinY, playerX, playerY) > 100) {
       return false
     } else {
-      game.player.score += 10;
+      game.player.score += 5;
       return true
     }
   }

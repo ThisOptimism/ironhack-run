@@ -9,6 +9,7 @@ class Game {
     this.coins = [];
     this.obstacles = [];
     this.firstAidArr = [];
+    this.gameSpeed = 1;
   }
 
   setup() {
@@ -29,15 +30,15 @@ class Game {
     this.backgroundImages = [{
       src: loadImage('assets/images/background/bg3.png'),
       x: 0,
-      speed: 1
+      speed: 1 * this.gameSpeed
     }, {
       src: loadImage('assets/images/background/bg2.png'),
       x: 0,
-      speed: 3
+      speed: 3 * this.gameSpeed
     }, {
       src: loadImage('assets/images/background/bg1.png'),
       x: 0,
-      speed: 5
+      speed: 5 * this.gameSpeed
     }]
   }
 
@@ -63,50 +64,50 @@ class Game {
 
 
   drawObstacles() {
-    if (frameCount % 200 === 0) {
-      this.obstacles.push(this.obstacle = new Obstacles());
+    if (frameCount * this.gameSpeed % 100 === 0) {
+      this.obstacles.push(this.obstacle = new Obstacles(this.obstacleImage));
     }
+    this.obstacles.forEach(obs => {
+      obs.draw();
+    })
     this.obstacles = this.obstacles.filter(obstacle => {
-      if (this.obstacle.collision(this.player) || this.obstacle.x < 0) {
+      if (obstacle.collision(this.player) || this.obstacle.x < 0) {
         return false
       } else {
         return true
       }
-    })
-    this.obstacles.forEach(obs => {
-      obs.draw();
     })
   }
 
   drawFirstAid() {
-    if (frameCount % 10000 === 0) {
+    if (frameCount % 1000 * this.gameSpeed === 0) {
       this.firstAidArr.push(this.firstAid = new firstAid());
     }
+    this.firstAidArr.forEach(firstAid => {
+      firstAid.draw();
+    })
     this.firstAidArr = this.firstAidArr.filter(firstAid => {
-      if (this.firstAid.collision(this.player) || this.firstAid.x < 0) {
+      if (firstAid.collision(this.player) || this.firstAid.x < 0) {
         return false
       } else {
         return true
       }
-    })
-    this.firstAidArr.forEach(firstAid => {
-      firstAid.draw();
     })
   }
 
   coinDraw() {
-    if (frameCount % 80 === 0) {
-      this.coins.push(this.coin = new Coin);
+    if (frameCount * this.gameSpeed % 30 === 0) {
+      this.coins.push(this.coin = new Coin());
     }
+    this.coins.forEach(coin => {
+      coin.draw();
+    })
     this.coins = this.coins.filter(coin => {
-      if (this.coin.collision(this.player)) {
+      if (coin.collision(this.player)) {
         return false
       } else {
         return true
       }
-    })
-    this.coins.forEach(coin => {
-      coin.draw();
     })
   }
 }
