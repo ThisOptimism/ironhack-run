@@ -1,10 +1,9 @@
 class Obstacles {
   constructor() {
     this.x = width;
-    this.y = (Math.random() * height) / 2 + 150;
+    this.y = (Math.random() * height) / 2 + 150
     this.width = 50;
-    this.height = 10;
-    this.image;
+    this.height = 50;
   }
   collision(playerInfo) {
     const obstacleX = this.x + this.width / 2;
@@ -16,12 +15,15 @@ class Obstacles {
       return false
     } else {
       game.player.health -= 20
-      console.log('asd')
+      if (game.player.health <= 0) {
+        window.alert('GAME OVER!')
+      }
       return true
     }
   }
   draw() {
-    rect(this.x, this.y, this.width, this.height)
-    this.x -= 15;
+    // rect(this.x, this.y, this.width, this.height);
+    image(game.obstacleImage, this.x, this.y, this.width, this.height);
+    this.x -= 5;
   }
 }

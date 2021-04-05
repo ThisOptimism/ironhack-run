@@ -11,15 +11,17 @@ function preload() {
 }
 
 function draw() {
-  clear()
-  game.draw()
+  clear();
+  background('grey')
+
+  game.drawObstacles();
+  game.drawFirstAid();
+  game.draw();
+
 }
 
 function keyPressed() {
   if (keyCode === 32) {
     game.player.jump();
   }
-  // if (keyCode === 68) {
-  //   game.player.x += 1
-  // }
 }
