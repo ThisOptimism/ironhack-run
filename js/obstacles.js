@@ -16,9 +16,9 @@ class Obstacles {
     if (dist(obstacleX, obstacleY, playerX, playerY) > 90) {
       return false
     } else {
-      game.player.health -= 20;
+      game.player.health -= 30;
       if (game.player.health <= 0) {
-        
+        game.player.health = 0;
       }
       return true
     }

@@ -1,11 +1,8 @@
 const game = new Game();
 let song;
-let mode;
 
 function setup() {
-  mode = 0
   createCanvas(1000, 600);
-  textSize(21);
 }
 
 function preload() {
@@ -16,37 +13,21 @@ function preload() {
 
 function draw() {
   clear();
-  if (mode === 0) {
-    textSize()
-    text('Press "Enter" to start', 20, 30);
-  };
-  if (mode === 1) {
-    game.draw();
-    frameRate(60)
-  }
-  if (mode === 2) {
-    game.draw();
-    frameRate(0);
-    textSize(32);
-    text('- PAUSE -', 430, 300);
-    textSize(16);
-    text('Press "Enter" to resume', 410, 330)
-  }
+  game.draw();
 }
 
 function keyPressed() {
-  if (keyCode === 27 && mode == 1) {
-    mode = 2;
+  game.player.keyIsPressed();
+  if (keyCode === 27 && game.mode == 1) {
+    game.mode = 2;
     song.pause();
-    let menu = document.querySelector('.menu')
-    // menu.style.display = 'block';
   }
 
   if (keyCode === ENTER) {
-    mode = 1
+    game.mode = 1
     if (!song.isPlaying()) {
-      // song.setVolume(0.6);
-      // song.loop();
+      song.setVolume(0.6);
+      song.loop();
     }
     frameRate(50)
   }

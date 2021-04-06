@@ -1,6 +1,6 @@
 class Game {
   constructor() {
-    // this.mode;
+    this.mode;
     this.playerImage;
     this.firstAidImage;
     this.obstacleImage;
@@ -13,8 +13,11 @@ class Game {
     this.firstAidArr = [];
     this.gameSpeed = 1;
     this.obstacleFreq = 1;
+    this.jumpSound;
+    this.dogImage;
   }
   setup() {
+    this.mode = 0
     this.player = new Player();
     this.background = new Background();
     this.foreground = new Foreground();
@@ -26,38 +29,87 @@ class Game {
     this.playerImage = loadImage('assets/images/steffen.gif');
     this.firstAidImage = loadImage('assets/images/pizza.png');
     this.obstacleImage = loadImage('assets/images/coronavirus.png');
-    this.foregroundImage = loadImage('assets/images/background/fg1.png');
+    this.foregroundImage = loadImage('assets/images/background/day/fg1.png');
+    this.foregroundImageNight = loadImage('assets/images/background/night/fg1.png');
+    this.dogImage = loadImage('assets/images/background/day/dog.gif')
+
+    // sounds
+    this.jumpSound = loadSound('assets/sound/jump.wav')
 
     // background images
     this.backgroundImages = [{
-        src: loadImage('assets/images/background/bg3.png'),
+        src: loadImage('assets/images/background/day/bg4.png'),
         x: 0,
         speed: 1 * this.gameSpeed
       },
       {
-        src: loadImage('assets/images/background/bg2.png'),
+        src: loadImage('assets/images/background/day/bg3.png'),
+        x: 0,
+        speed: 1.5 * this.gameSpeed
+      },
+      {
+        src: loadImage('assets/images/background/day/bg2.png'),
         x: 0,
         speed: 2 * this.gameSpeed
       },
       {
-        src: loadImage('assets/images/background/bg1.png'),
+        src: loadImage('assets/images/background/day/bg1.png'),
         x: 0,
-        speed: 5 * this.gameSpeed
+        speed: 6 * this.gameSpeed
+      }
+    ]
+    // bachground Images Day
+    this.backgroundImagesNight = [{
+        src: loadImage('assets/images/background/night/bg4.png'),
+        x: 0,
+        speed: 1 * this.gameSpeed
+      },
+      {
+        src: loadImage('assets/images/background/night/bg3.png'),
+        x: 0,
+        speed: 1.5 * this.gameSpeed
+      },
+      {
+        src: loadImage('assets/images/background/night/bg2.png'),
+        x: 0,
+        speed: 2 * this.gameSpeed
+      },
+      {
+        src: loadImage('assets/images/background/night/bg1.png'),
+        x: 0,
+        speed: 6 * this.gameSpeed
       }
     ]
   }
 
   draw() {
-    this.background.draw()
-    this.drawFirstAid()
-    game.drawObstacles();
-    this.coinDraw();
-    this.player.draw();
-    this.foreground.draw();
-    this.player.healthBarDraw();
-    this.player.scoreDraw();
-    this.levelStatusDraw();
-    this.gameover();
+    // game mode
+    if (this.mode === 1) {
+      this.background.draw()
+      this.drawFirstAid()
+      game.drawObstacles();
+      this.coinDraw();
+      this.player.draw();
+      this.foreground.draw();
+      this.player.healthBarDraw();
+      this.player.scoreDraw();
+      this.levelStatusDraw();
+      this.gameover();
+      frameRate(60)
+    }
+    // pause mode 
+    if (this.mode === 2) {
+      this.background.draw();
+      this.foreground.draw();
+      this.player.healthBarDraw();
+      this.levelStatusDraw();
+      this.player.scoreDraw();
+      frameRate(0);
+      textSize(32);
+      text('– PAUSE –', 420, 300);
+      textSize(16);
+      text('Press "Enter" to resume', 417, 335)
+    }
   }
 
   gameover() {
@@ -69,6 +121,7 @@ class Game {
       this.obstacles = [];
       this.coins = [];
       this.firstAidArr = [];
+      song.pause();
     }
   }
 
@@ -123,7 +176,6 @@ class Game {
       if (coin.collision(this.player)) {
         return false
       } else {
-        // sound
         return true
       }
     })

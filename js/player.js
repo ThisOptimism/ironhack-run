@@ -4,14 +4,15 @@ class Player {
     this.y = 400;
     this.height = 200;
     this.width = 100;
-    this.playerImage;
     this.score = 0;
     this.health = 150;
     this.level = 1;
     this.gravity = 0.6;
     this.velocity = 0;
+    this.playerImage;
+    this.jumpSound;
   }
-  preload() {}
+
   draw() {
     if (keyIsDown(65) && this.x >= 5) this.moveLeft();
     if (keyIsDown(68) && this.x <= 900) this.moveRight();
@@ -22,14 +23,13 @@ class Player {
     this.y += this.velocity;
     this.y += this.gravity
     this.y = constrain(this.y, 0, height - this.height - 30)
-
     image(game.playerImage, this.x, this.y, this.width, this.height)
   }
 
   scoreDraw() {
     textSize(26);
     image(game.coinImage, 840, 28, 36, 27)
-    text(`: ${this.score}`, 885, 50);
+    text(`${this.score} / 200`, 885, 50);
   }
 
   healthBarDraw() {
@@ -45,6 +45,14 @@ class Player {
     noStroke()
     fill('rgb(0,255,0)')
     rect(21, 31, this.health - 2, 18)
+    pop()
+
+
+    // white space
+    push()
+    noStroke()
+    fill('white')
+    rect(0, 30, 18, 20)
     pop()
 
     // red cross
@@ -63,9 +71,11 @@ class Player {
   }
   jump() {
     if (this.y > 360)
-      this.velocity = -20;
+      this.velocity = -19;
   }
-  getDamage(damage) {
-    this.health -= damage;
+  keyIsPressed() {
+    if (keyCode === 32 && this.y > 290) {
+      game.jumpSound.play();
+    }
   }
 }
