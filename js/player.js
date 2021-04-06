@@ -11,9 +11,7 @@ class Player {
     this.gravity = 0.6;
     this.velocity = 0;
   }
-  preload() {
-
-  }
+  preload() {}
   draw() {
     if (keyIsDown(65) && this.x >= 5) this.moveLeft();
     if (keyIsDown(68) && this.x <= 900) this.moveRight();
@@ -33,25 +31,21 @@ class Player {
   }
 
   healthBarDraw() {
-    // white Bar
+    // white bar / frame
     push()
     stroke('black')
     fill('white')
     rect(20, 30, 150, 20)
     pop()
 
-
-    // green Bar
+    // green bar
     push()
     noStroke()
-    // stroke('black')
-    // strokeWeight('3');
     fill('rgb(0,255,0)')
     rect(21, 31, this.health - 2, 18)
     pop()
 
-
-    // Red Cross
+    // red cross
     push()
     fill('red')
     noStroke()
@@ -60,10 +54,10 @@ class Player {
     pop()
   }
   moveLeft() {
-    this.x -= 5
+    this.x -= 5 * game.gameSpeed / 1.5
   }
   moveRight() {
-    this.x += 5
+    this.x += 5 * game.gameSpeed / 1.5
   }
   jump() {
     if (this.y > 360)

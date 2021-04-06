@@ -7,11 +7,8 @@ class Coin {
     this.image;
   }
   draw() {
-    // push()
-    // rect(this.x, this.y, 50, 50)
-    // pop()
     image(game.coinImage, this.x, this.y, this.width, this.height)
-    this.x -= 5
+    this.x -= 5 * game.gameSpeed;
   }
 
   collision(playerInfo) {
@@ -20,10 +17,10 @@ class Coin {
     const playerX = playerInfo.x + playerInfo.width / 2;
     const playerY = playerInfo.y + playerInfo.height / 2;
 
-    if (dist(coinX, coinY, playerX, playerY) > 100) {
+    if (dist(coinX, coinY, playerX, playerY) > 80) {
       return false
     } else {
-      game.player.score += 5;
+      game.player.score++;
       return true
     }
   }

@@ -1,12 +1,17 @@
 class Background {
   draw() {
-    game.backgroundImages.forEach(bg => {
-      bg.x -= bg.speed
-      image(bg.src, bg.x, 0, width, height)
-      image(bg.src, bg.x + width, 0, width, height)
-      if (bg.x <= -width) {
-        bg.x = 0;
-      }
-    })
+    // Level #1
+    if (game.player.score >= 0) {
+      game.backgroundImages.forEach(bgImg => {
+        bgImg.x -= bgImg.speed
+        image(bgImg.src, bgImg.x, 0, width, height)
+        image(bgImg.src, bgImg.x + width, 0, width, height)
+        if (bgImg.x <= -width) {
+          bgImg.x = 0;
+        }
+      })
+    }
+    // TransitionEvent
+    // Level #2
   }
 }

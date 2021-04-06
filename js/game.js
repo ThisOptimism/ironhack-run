@@ -6,10 +6,13 @@ class Game {
     this.backgroundImages;
     this.foregroundImage;
     this.coinImage;
+    this.mySound;
     this.coins = [];
     this.obstacles = [];
     this.firstAidArr = [];
     this.gameSpeed = 1;
+    this.song;
+   
   }
 
   setup() {
@@ -24,22 +27,24 @@ class Game {
     this.firstAidImage = loadImage('assets/images/pizza.png');
     this.obstacleImage = loadImage('assets/images/coronavirus.png');
     this.foregroundImage = loadImage('assets/images/background/fg1.png');
-
-
+    
     // background images
     this.backgroundImages = [{
-      src: loadImage('assets/images/background/bg3.png'),
-      x: 0,
-      speed: 1 * this.gameSpeed
-    }, {
-      src: loadImage('assets/images/background/bg2.png'),
-      x: 0,
-      speed: 3 * this.gameSpeed
-    }, {
-      src: loadImage('assets/images/background/bg1.png'),
-      x: 0,
-      speed: 5 * this.gameSpeed
-    }]
+        src: loadImage('assets/images/background/bg3.png'),
+        x: 0,
+        speed: 1 * this.gameSpeed
+      },
+      {
+        src: loadImage('assets/images/background/bg2.png'),
+        x: 0,
+        speed: 3 * this.gameSpeed
+      },
+      {
+        src: loadImage('assets/images/background/bg1.png'),
+        x: 0,
+        speed: 5 * this.gameSpeed
+      }
+    ]
   }
 
   draw() {
@@ -52,7 +57,6 @@ class Game {
     this.player.healthBarDraw();
     this.player.scoreDraw();
     this.levelStatusDraw();
-
   }
 
   levelStatusDraw() {
@@ -65,7 +69,7 @@ class Game {
 
   drawObstacles() {
     if (frameCount * this.gameSpeed % 100 === 0) {
-      this.obstacles.push(this.obstacle = new Obstacles(this.obstacleImage));
+      this.obstacles.push(this.obstacle = new Obstacles(1));
     }
     this.obstacles.forEach(obs => {
       obs.draw();
@@ -80,7 +84,7 @@ class Game {
   }
 
   drawFirstAid() {
-    if (frameCount % 1000 * this.gameSpeed === 0) {
+    if (frameCount % 1000 === 0) {
       this.firstAidArr.push(this.firstAid = new firstAid());
     }
     this.firstAidArr.forEach(firstAid => {
@@ -96,7 +100,7 @@ class Game {
   }
 
   coinDraw() {
-    if (frameCount * this.gameSpeed % 30 === 0) {
+    if (frameCount % 30 === 0) {
       this.coins.push(this.coin = new Coin());
     }
     this.coins.forEach(coin => {

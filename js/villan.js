@@ -1,8 +1,4 @@
 class Villan {
-  constructor() {
-
-  }
-  draw() {
-
-  }
+  constructor() {}
+  draw() {}
 }
