@@ -18,9 +18,7 @@ class Obstacles {
     } else {
       game.player.health -= 20;
       if (game.player.health <= 0) {
-        // Game Over LOGIC here...
-        // window.alert('GAME OVER!')
-        // rect(0, 0, 40, 40)
+        
       }
       return true
     }

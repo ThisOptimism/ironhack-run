@@ -13,5 +13,8 @@ class Background {
     }
     // TransitionEvent
     // Level #2
+    if (frameCount % 10000 === 0) {
+      game.player.level = 2
+    }
   }
 }

@@ -2,8 +2,8 @@ class Coin {
   constructor() {
     this.x = width;
     this.y = (Math.random() * height) / 2 + 150
-    this.width = 30;
-    this.height = 30;
+    this.width = 36;
+    this.height = 27;
     this.image;
   }
   draw() {

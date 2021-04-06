@@ -9,7 +9,7 @@ body {
 }
 
 canvas {
-  /* border: 1px solid black; */
+  box-shadow: 10px 5px 10px 1px black;
 }
 
 header {
@@ -31,8 +31,19 @@ main {
   right: 0;
   left: 0;
   bottom: 0;
-  border: 1px solid black;
-  background-color: fuchsia;
+  background-color: turquoise;
+}
+
+.gameover {
+  background-image: url('https://media.giphy.com/media/SIPIe590rx6iA/giphy.gif');
+  background-position: center;
+  background-repeat: no-repeat;
+  display: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
 }
 
 @keyframes blink {
@@ -41,6 +52,7 @@ main {
   to {
     color: transparent;
   }
+
   50% {
     color: black
   }

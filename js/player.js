@@ -15,6 +15,7 @@ class Player {
   draw() {
     if (keyIsDown(65) && this.x >= 5) this.moveLeft();
     if (keyIsDown(68) && this.x <= 900) this.moveRight();
+    if (keyIsDown(32)) this.jump();
 
     //  gravity
     this.velocity += this.gravity;
@@ -27,7 +28,8 @@ class Player {
 
   scoreDraw() {
     textSize(26);
-    text(`💰: ${this.score}`, 885, 50);
+    image(game.coinImage, 840, 28, 36, 27)
+    text(`: ${this.score}`, 885, 50);
   }
 
   healthBarDraw() {
@@ -54,7 +56,7 @@ class Player {
     pop()
   }
   moveLeft() {
-    this.x -= 5 * game.gameSpeed / 1.5
+    this.x -= 13 * game.gameSpeed / 1.5
   }
   moveRight() {
     this.x += 5 * game.gameSpeed / 1.5

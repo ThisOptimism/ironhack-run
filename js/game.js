@@ -1,5 +1,6 @@
 class Game {
   constructor() {
+    // this.mode;
     this.playerImage;
     this.firstAidImage;
     this.obstacleImage;
@@ -11,23 +12,22 @@ class Game {
     this.obstacles = [];
     this.firstAidArr = [];
     this.gameSpeed = 1;
-    this.song;
-   
+    this.obstacleFreq = 1;
   }
-
   setup() {
     this.player = new Player();
     this.background = new Background();
     this.foreground = new Foreground();
+
   }
   preload() {
     // neuro = loadFont('assets/fonts/neuropol.ttf');
-    this.coinImage = loadImage('assets/images/coin.png');
+    this.coinImage = loadImage('assets/images/lab.png');
     this.playerImage = loadImage('assets/images/steffen.gif');
     this.firstAidImage = loadImage('assets/images/pizza.png');
     this.obstacleImage = loadImage('assets/images/coronavirus.png');
     this.foregroundImage = loadImage('assets/images/background/fg1.png');
-    
+
     // background images
     this.backgroundImages = [{
         src: loadImage('assets/images/background/bg3.png'),
@@ -37,7 +37,7 @@ class Game {
       {
         src: loadImage('assets/images/background/bg2.png'),
         x: 0,
-        speed: 3 * this.gameSpeed
+        speed: 2 * this.gameSpeed
       },
       {
         src: loadImage('assets/images/background/bg1.png'),
@@ -57,6 +57,19 @@ class Game {
     this.player.healthBarDraw();
     this.player.scoreDraw();
     this.levelStatusDraw();
+    this.gameover();
+  }
+
+  gameover() {
+    // Game Over LOGIC here...
+    if (this.player.health <= 0) {
+      document.querySelector('.gameover').style.display = "block";
+      background('rgba(0, 0, 0, 0.4)')
+      frameRate(0)
+      this.obstacles = [];
+      this.coins = [];
+      this.firstAidArr = [];
+    }
   }
 
   levelStatusDraw() {
@@ -68,7 +81,7 @@ class Game {
 
 
   drawObstacles() {
-    if (frameCount * this.gameSpeed % 100 === 0) {
+    if (frameCount * this.obstacleFreq % 100 === 0) {
       this.obstacles.push(this.obstacle = new Obstacles(1));
     }
     this.obstacles.forEach(obs => {
@@ -110,6 +123,7 @@ class Game {
       if (coin.collision(this.player)) {
         return false
       } else {
+        // sound
         return true
       }
     })
