@@ -39,9 +39,9 @@ class Game {
   preload() {
     // neuro = loadFont('assets/fonts/neuropol.ttf');
     // images
-    this.coinImage = loadImage('assets/images/lab.png');
-    this.playerImage = loadImage('assets/images/steffen.gif');
-    this.firstAidImage = loadImage('assets/images/pizza.png');
+    this.coinImage = loadImage('/assets/images/lab.png');
+    this.playerImage = loadImage('/assets/images/steffen.gif');
+    this.firstAidImage = loadImage('/assets/images/pizza.png');
     this.obstacleImage = loadImage('assets/images/coronavirus.png');
     this.foregroundImage = loadImage('assets/images/background/day/fg1.png');
     this.foregroundImageNight = loadImage('assets/images/background/night/fg1.png');
