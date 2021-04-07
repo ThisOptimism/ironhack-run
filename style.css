@@ -68,6 +68,7 @@ main {
 }
 
 .gameover button {
+  outline: none;
   transition: 0.3s;
   display: block;
   margin: 0 auto;

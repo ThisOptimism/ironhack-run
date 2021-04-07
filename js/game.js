@@ -2,7 +2,7 @@ class Game {
   constructor() {
     this.mode;
     this.gameSpeed = 1;
-    this.obstacleFreq = 1;
+    this.obstacleFreq = 100;
     this.playerImage;
     this.backgroundImages;
     this.foregroundImage;
@@ -19,6 +19,7 @@ class Game {
     this.firstAidImage;
 
     this.teslaArr = [];
+    this.teslaImg;
 
     this.gameoverSound;
     this.gameoverSoundCounter = 0;
@@ -100,14 +101,13 @@ class Game {
   }
 
   draw() {
-    // if (this.mode === 0)
     // game mode
     if (this.mode === 1) {
       this.background.draw()
       this.drawFirstAid()
       this.drawObstacles();
       this.drawCoin();
-      if (this.player.score > 5) {
+      if (this.player.level === 2) {
         this.villan.draw();
         this.drawTesla();
       }
@@ -118,7 +118,8 @@ class Game {
       this.player.scoreDraw();
       this.levelStatusDraw();
       this.gameover();
-      frameRate(60)
+      this.winning();
+      // frameRate(60)
     }
     // pause mode 
     if (this.mode === 2) {
@@ -128,6 +129,9 @@ class Game {
       this.levelStatusDraw();
       this.player.scoreDraw();
       frameRate(0);
+      if (this.player.level === 2) {
+        text
+      }
       textSize(32);
       text('– PAUSE –', 420, 300);
       textSize(16);
@@ -140,7 +144,6 @@ class Game {
     if (this.player.health <= 0) {
       document.querySelector('.gameover').style.display = "block";
       background('rgba(0, 0, 0, 0.4)')
-      frameRate(0)
       this.obstacles = [];
       this.coins = [];
       this.firstAidArr = [];
@@ -150,6 +153,18 @@ class Game {
         this.gameoverSound.play();
         this.gameoverSoundCounter++
       }
+    }
+  }
+
+  winning() {
+    if (game.villan.health <= 0) {
+      document.querySelector('.won').style.display = "block";
+      background('rgba(0, 0, 0, 0.4)');
+      this.obstacles = [];
+      this.firstAidArr = [];
+      this.teslaArr = [];
+      this.coins.push(this.coin = new Coin);
+      game.villan.health = 0;
     }
   }
   shoot() {
@@ -175,7 +190,7 @@ class Game {
   }
 
   drawObstacles() {
-    if (frameCount * this.obstacleFreq % 100 === 0) {
+    if (frameCount % this.obstacleFreq === 0) {
       this.obstacles.push(this.obstacle = new Obstacles(1));
     }
     this.obstacles.forEach(obs => {

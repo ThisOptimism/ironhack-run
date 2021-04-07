@@ -16,10 +16,9 @@ class Shot {
     const objectX = objectInfo.x + objectInfo.width / 2;
     const objectY = objectInfo.y + objectInfo.height / 2;
 
-    if (dist(bulletX, bulletY, objectX, objectY) > 50) {
+    if (dist(bulletX, bulletY, objectX, objectY) > 40) {
       return false
     } else {
-      console.log('asd')
       game.obstacles.splice(game.obstacles.indexOf(objectInfo));
       return true
     }
