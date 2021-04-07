@@ -13,7 +13,7 @@ class Foreground {
 
 
       this.x2 -= 7;
-      if (this.x2 <= -width - 400) {
+      if (this.x2 <= -width - 2000) {
         this.x2 = 0
       }
       this.x -= 6;

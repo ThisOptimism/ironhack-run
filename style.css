@@ -27,6 +27,7 @@ main {
 
 .menu {
   text-align: center;
+  opacity: 0.3;
   position: absolute;
   top: 0;
   right: 0;

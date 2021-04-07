@@ -19,6 +19,7 @@ class Tesla {
       return false
     } else {
       game.player.health -= 20;
+      game.gettingHitSound.play();
       return true
       console.log('hit by tesla')
     }

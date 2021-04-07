@@ -16,6 +16,7 @@ class Obstacles {
     if (dist(obstacleX, obstacleY, playerX, playerY) > 90) {
       return false
     } else {
+      game.gettingHitSound.play();
       game.player.health -= 20;
       return true
     }

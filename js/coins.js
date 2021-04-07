@@ -21,6 +21,8 @@ class Coin {
       return false
     } else {
       game.player.score++;
+      game.coinSound.play();
+      game.coinSound.setVolume(0.2)
       return true
     }
   }

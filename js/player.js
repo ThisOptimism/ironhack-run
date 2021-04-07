@@ -4,14 +4,16 @@ class Player {
     this.y = 400;
     this.height = 200;
     this.width = 100;
-    this.score = 0;
+    this.score = 30;
     this.health = 150;
     this.level = 1;
     this.gravity = 0.6;
     this.velocity = 0;
     this.playerImage;
     this.jumpSound;
+    this.bullets = [];
   }
+  setup() {}
 
   draw() {
     if (keyIsDown(65) && this.x >= 5) this.moveLeft();
@@ -76,6 +78,13 @@ class Player {
   keyIsPressed() {
     if (keyCode === 32 && this.y > 290) {
       game.jumpSound.play();
+    }
+    if (keyCode === 80) {
+      if (this.score > 0) {
+        this.bullets.push(this.gun = new Shot())
+        game.shotSound.play();
+        this.score--
+      }
     }
   }
 }

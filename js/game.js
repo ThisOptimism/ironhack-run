@@ -1,23 +1,31 @@
 class Game {
   constructor() {
     this.mode;
-    this.playerImage;
-    this.firstAidImage;
-    this.obstacleImage;
-    this.backgroundImages;
-    this.foregroundImage;
-    this.coinImage;
-    this.mySound;
-    this.coins = [];
-    this.obstacles = [];
-    this.firstAidArr = [];
-    this.teslaArr = [];
     this.gameSpeed = 1;
     this.obstacleFreq = 1;
+    this.playerImage;
+    this.backgroundImages;
+    this.foregroundImage;
+    this.mySound;
+
+    this.coins = [];
+    this.coinImage;
+    this.coinSound;
+
+    this.obstacles = [];
+    this.obstacleImage;
+
+    this.firstAidArr = [];
+    this.firstAidImage;
+
+    this.teslaArr = [];
+
     this.gameoverSound;
     this.gameoverSoundCounter = 0;
     this.jumpSound;
+    this.gettingHitSound;
     this.dogImage;
+    this.shotSound;
 
   }
   setup() {
@@ -29,6 +37,7 @@ class Game {
   }
   preload() {
     // neuro = loadFont('assets/fonts/neuropol.ttf');
+    // images
     this.coinImage = loadImage('assets/images/lab.png');
     this.playerImage = loadImage('assets/images/steffen.gif');
     this.firstAidImage = loadImage('assets/images/pizza.png');
@@ -38,6 +47,9 @@ class Game {
     this.dogImage = loadImage('assets/images/background/day/dog.gif');
 
     // sounds
+    this.shotSound = loadSound('assets/sound/shot.wav');
+    this.coinSound = loadSound('assets/sound/coin.wav');
+    this.gettingHitSound = loadSound('assets/sound/hit.wav');
     this.jumpSound = loadSound('assets/sound/jump.wav');
     this.gameoverSound = loadSound('assets/sound/gameover.wav');
 
@@ -88,17 +100,19 @@ class Game {
   }
 
   draw() {
+    // if (this.mode === 0)
     // game mode
     if (this.mode === 1) {
       this.background.draw()
       this.drawFirstAid()
       this.drawObstacles();
       this.drawCoin();
-      if (this.player.score > 20) {
+      if (this.player.score > 5) {
         this.villan.draw();
         this.drawTesla();
       }
       this.player.draw();
+      this.shoot();
       this.foreground.draw();
       this.player.healthBarDraw();
       this.player.scoreDraw();
@@ -130,12 +144,27 @@ class Game {
       this.obstacles = [];
       this.coins = [];
       this.firstAidArr = [];
+      this.teslaArr = [];
       song.pause();
       if (!this.gameoverSound.isPlaying() && this.gameoverSoundCounter === 0) {
         this.gameoverSound.play();
         this.gameoverSoundCounter++
       }
     }
+  }
+  shoot() {
+    this.player.bullets.forEach(bullet => {
+      bullet.draw();
+    })
+    this.obstacles.forEach(obs => {
+      this.player.bullets = this.player.bullets.filter(bullet => {
+        if (bullet.collision(obs) || bullet.x > 1000) {
+          return false
+        } else {
+          return true;
+        }
+      })
+    })
   }
 
   levelStatusDraw() {
@@ -145,7 +174,6 @@ class Game {
     pop();
   }
 
-
   drawObstacles() {
     if (frameCount * this.obstacleFreq % 100 === 0) {
       this.obstacles.push(this.obstacle = new Obstacles(1));
@@ -154,7 +182,7 @@ class Game {
       obs.draw();
     })
     this.obstacles = this.obstacles.filter(obstacle => {
-      if (obstacle.collision(this.player) || this.obstacle.x < 0) {
+      if (obstacle.collision(this.player) || obstacle.x < 0) {
         return false
       } else {
         return true
@@ -170,7 +198,7 @@ class Game {
       firstAid.draw();
     })
     this.firstAidArr = this.firstAidArr.filter(firstAid => {
-      if (firstAid.collision(this.player) || this.firstAid.x < 0) {
+      if (firstAid.collision(this.player) || firstAid.x < 0) {
         return false
       } else {
         return true
@@ -179,14 +207,14 @@ class Game {
   }
 
   drawCoin() {
-    if (frameCount % 30 === 0) {
+    if (frameCount % 400 === 0) {
       this.coins.push(this.coin = new Coin());
     }
     this.coins.forEach(coin => {
       coin.draw();
     })
     this.coins = this.coins.filter(coin => {
-      if (coin.collision(this.player)) {
+      if (coin.collision(this.player) || coin.x < 0) {
         return false
       } else {
         return true
