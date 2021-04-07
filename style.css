@@ -35,6 +35,18 @@ main {
   background-color: turquoise;
 }
 
+.won {
+  background-image: url('https://media.giphy.com/media/SIPIe590rx6iA/giphy.gif');
+  background-position: center;
+  background-repeat: no-repeat;
+  display: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+}
+
 .gameover {
   background-image: url('https://media.giphy.com/media/SIPIe590rx6iA/giphy.gif');
   background-position: center;

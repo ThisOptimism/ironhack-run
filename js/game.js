@@ -11,19 +11,21 @@ class Game {
     this.coins = [];
     this.obstacles = [];
     this.firstAidArr = [];
+    this.teslaArr = [];
     this.gameSpeed = 1;
     this.obstacleFreq = 1;
     this.gameoverSound;
-    this.gameoverSoundCouter = 0;
+    this.gameoverSoundCounter = 0;
     this.jumpSound;
     this.dogImage;
+
   }
   setup() {
     this.mode = 0
     this.player = new Player();
+    this.villan = new Villan();
     this.background = new Background();
     this.foreground = new Foreground();
-    this.gameoverSounds();
   }
   preload() {
     // neuro = loadFont('assets/fonts/neuropol.ttf');
@@ -90,8 +92,12 @@ class Game {
     if (this.mode === 1) {
       this.background.draw()
       this.drawFirstAid()
-      game.drawObstacles();
-      this.coinDraw();
+      this.drawObstacles();
+      this.drawCoin();
+      if (this.player.score > 20) {
+        this.villan.draw();
+        this.drawTesla();
+      }
       this.player.draw();
       this.foreground.draw();
       this.player.healthBarDraw();
@@ -125,9 +131,9 @@ class Game {
       this.coins = [];
       this.firstAidArr = [];
       song.pause();
-      if (!this.gameoverSound.isPlaying() && this.gameoverSoundCouter === 0) {
+      if (!this.gameoverSound.isPlaying() && this.gameoverSoundCounter === 0) {
         this.gameoverSound.play();
-        this.gameoverSoundCouter++
+        this.gameoverSoundCounter++
       }
     }
   }
@@ -172,7 +178,7 @@ class Game {
     })
   }
 
-  coinDraw() {
+  drawCoin() {
     if (frameCount % 30 === 0) {
       this.coins.push(this.coin = new Coin());
     }
@@ -181,6 +187,21 @@ class Game {
     })
     this.coins = this.coins.filter(coin => {
       if (coin.collision(this.player)) {
+        return false
+      } else {
+        return true
+      }
+    })
+  }
+  drawTesla() {
+    if (frameCount % 170 === 0) {
+      this.teslaArr.push(this.tesla = new Tesla());
+    }
+    this.teslaArr.forEach(tesla => {
+      tesla.draw()
+    })
+    this.teslaArr = this.teslaArr.filter(tesla => {
+      if (tesla.collision(this.player)) {
         return false
       } else {
         return true
