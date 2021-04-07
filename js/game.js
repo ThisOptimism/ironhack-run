@@ -13,6 +13,8 @@ class Game {
     this.firstAidArr = [];
     this.gameSpeed = 1;
     this.obstacleFreq = 1;
+    this.gameoverSound;
+    this.gameoverSoundCouter = 0;
     this.jumpSound;
     this.dogImage;
   }
@@ -21,7 +23,7 @@ class Game {
     this.player = new Player();
     this.background = new Background();
     this.foreground = new Foreground();
-
+    this.gameoverSounds();
   }
   preload() {
     // neuro = loadFont('assets/fonts/neuropol.ttf');
@@ -31,10 +33,11 @@ class Game {
     this.obstacleImage = loadImage('assets/images/coronavirus.png');
     this.foregroundImage = loadImage('assets/images/background/day/fg1.png');
     this.foregroundImageNight = loadImage('assets/images/background/night/fg1.png');
-    this.dogImage = loadImage('assets/images/background/day/dog.gif')
+    this.dogImage = loadImage('assets/images/background/day/dog.gif');
 
     // sounds
-    this.jumpSound = loadSound('assets/sound/jump.wav')
+    this.jumpSound = loadSound('assets/sound/jump.wav');
+    this.gameoverSound = loadSound('assets/sound/gameover.wav');
 
     // background images
     this.backgroundImages = [{
@@ -122,6 +125,10 @@ class Game {
       this.coins = [];
       this.firstAidArr = [];
       song.pause();
+      if (!this.gameoverSound.isPlaying() && this.gameoverSoundCouter === 0) {
+        this.gameoverSound.play();
+        this.gameoverSoundCouter++
+      }
     }
   }
 
