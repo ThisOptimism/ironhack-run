@@ -4,19 +4,21 @@ class Villan {
     this.y = 370;
     this.width = 100;
     this.height = 200;
+    this.damage = 20;
     this.health = 150;
     this.velocity = 0;
     this.gravity = 0.6;
     this.villianIamge;
-    this.speed = 1;
+    this.speed = 0.5;
+    this.bullets = [];
   }
+
   draw() {
     // gravity
     this.velocity += this.gravity;
     this.y += this.velocity;
     this.y += this.gravity;
     this.y = constrain(this.y, 0, height - this.height - 30);
-
     // health bar
     this.healtBar();
     rect(this.x, this.y, this.width, this.height);
@@ -33,10 +35,13 @@ class Villan {
     if (frameCount % 400 === 0) {
       this.jump();
     }
+    if (frameCount % 120 === 0) {
+      this.bullets.push(this.bullet = new ShotVillan())
+    }
+
   }
 
   getDamage() {
-
     game.player.bullets.forEach(bullet => {
       const villanX = this.x + this.width / 2;
       const villanY = this.y + this.height / 2;
@@ -53,16 +58,17 @@ class Villan {
   }
 
   healtBar() {
+
     push()
     stroke('black')
     fill('white')
-    rect(435, 70, 150, 20);
+    rect(this.x - 30, this.y - 21, 150, 12);
     pop()
 
     push();
     noStroke();
     fill('rgb(0,255,0)');
-    rect(436, 71, this.health - 2, 18);
+    rect(this.x + 1 - 30, this.y - 20, this.health - 2, 10);
     pop();
 
     push();

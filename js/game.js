@@ -101,25 +101,29 @@ class Game {
   }
 
   draw() {
-    // game mode
+    if (this.mode === 0) {
+      frameRate(0)
+    }
+
     if (this.mode === 1) {
       this.background.draw()
       this.drawFirstAid()
       this.drawObstacles();
       this.drawCoin();
-      if (this.player.level === 2) {
+
+      if (this.player.level === 3) {
         this.villan.draw();
         this.drawTesla();
       }
       this.player.draw();
       this.shoot();
+      this.villanShoot()
       this.foreground.draw();
       this.player.healthBarDraw();
       this.player.scoreDraw();
       this.levelStatusDraw();
       this.gameover();
       this.winning();
-      // frameRate(60)
     }
     // pause mode 
     if (this.mode === 2) {
@@ -129,9 +133,6 @@ class Game {
       this.levelStatusDraw();
       this.player.scoreDraw();
       frameRate(0);
-      if (this.player.level === 2) {
-        text
-      }
       textSize(32);
       text('– PAUSE –', 420, 300);
       textSize(16);
@@ -140,7 +141,6 @@ class Game {
   }
 
   gameover() {
-    // Game Over LOGIC here...
     if (this.player.health <= 0) {
       document.querySelector('.gameover').style.display = "block";
       background('rgba(0, 0, 0, 0.4)')
@@ -148,6 +148,8 @@ class Game {
       this.coins = [];
       this.firstAidArr = [];
       this.teslaArr = [];
+      this.player.bullets = [];
+      this.villan.bullets = [];
       song.pause();
       if (!this.gameoverSound.isPlaying() && this.gameoverSoundCounter === 0) {
         this.gameoverSound.play();
@@ -165,6 +167,7 @@ class Game {
       this.teslaArr = [];
       this.coins.push(this.coin = new Coin);
       game.villan.health = 0;
+      game.villan.bullets = [];
     }
   }
   shoot() {
@@ -182,11 +185,33 @@ class Game {
     })
   }
 
+  villanShoot() {
+    this.villan.bullets.forEach(bullet => {
+      bullet.draw();
+    })
+    this.villan.bullets = this.villan.bullets.filter(bullet => {
+      if (bullet.collision(this.player) || bullet.x < 0) {
+        return false
+      } else {
+        return true;
+      }
+    })
+  }
+
   levelStatusDraw() {
     push();
     fill('black');
     text(`LEVEL ${this.player.level}`, 460, 50);
     pop();
+    if (this.background.turns === 30) {
+      game.player.level = 2;
+      game.gameSpeed = 1.5;
+    }
+    if (this.background.turns === 60) {
+      this.player.level = 3;
+      this.player.moveLeftSpeed = 10;
+      this.player.moveRightSpeed = 10;
+    }
   }
 
   drawObstacles() {

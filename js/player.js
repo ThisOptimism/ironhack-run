@@ -12,6 +12,8 @@ class Player {
     this.playerImage;
     this.jumpSound;
     this.bullets = [];
+    this.moveRightSpeed = 5;
+    this.moveLeftSpeed = 13;
   }
   setup() {}
 
@@ -66,17 +68,17 @@ class Player {
     pop()
   }
   moveLeft() {
-    this.x -= 13 * game.gameSpeed / 1.5
+    this.x -= this.moveLeftSpeed * game.gameSpeed / 1.5
   }
   moveRight() {
-    this.x += 5 * game.gameSpeed / 1.5
+    this.x += this.moveRightSpeed * game.gameSpeed / 1.5
   }
   jump() {
     if (this.y > 360)
       this.velocity = -19;
   }
   keyIsPressed() {
-    if (keyCode === 32 && this.y > 290) {
+    if (keyCode === 32 && this.y > 290 && game.mode === 1) {
       game.jumpSound.play();
     }
     if (keyCode === 80) {
