@@ -19,6 +19,7 @@ class Shot {
     if (dist(bulletX, bulletY, objectX, objectY) > 40) {
       return false
     } else {
+      game.blopSound.play();
       game.obstacles.splice(game.obstacles.indexOf(objectInfo));
       return true
     }

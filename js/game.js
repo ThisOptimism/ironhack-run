@@ -26,6 +26,7 @@ class Game {
     this.gettingHitSound;
     this.dogImage;
     this.shotSound;
+    this.blopSound;
 
   }
   setup() {
@@ -36,7 +37,6 @@ class Game {
     this.foreground = new Foreground();
   }
   preload() {
-    // neuro = loadFont('assets/fonts/neuropol.ttf');
     // images
     this.coinImage = loadImage('assets/images/lab.png');
     this.playerImage = loadImage('assets/images/steffen.gif');
@@ -52,6 +52,7 @@ class Game {
     this.gettingHitSound = loadSound('assets/sound/hit.wav');
     this.jumpSound = loadSound('assets/sound/jump.wav');
     this.gameoverSound = loadSound('assets/sound/gameover.wav');
+    this.blopSound = loadSound('assets/sound/blop.wav')
 
     // background images
     this.backgroundImages = [{
@@ -262,7 +263,7 @@ class Game {
     })
   }
   drawTesla() {
-    if (frameCount % 170 === 0) {
+    if (frameCount % 200 === 0) {
       this.teslaArr.push(this.tesla = new Tesla());
     }
     this.teslaArr.forEach(tesla => {

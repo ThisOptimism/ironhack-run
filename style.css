@@ -25,9 +25,15 @@ main {
   position: relative;
 }
 
+.flex {
+  display: flex;
+  justify-content: space-around;
+  align-items: baseline;
+}
+
 .menu {
+  padding: 4rem;
   text-align: center;
-  opacity: 0.3;
   position: absolute;
   top: 0;
   right: 0;
@@ -36,12 +42,29 @@ main {
   background-color: turquoise;
 }
 
+.menu p {
+  color: black;
+}
+
+.menu h1 {
+  animation: bigger 1.5s ease-in-out infinite;
+}
+
+.instructions span {
+  color: rgb(97, 52, 36)
+}
+
+.instructions {
+  text-align: left;
+}
+
 .won {
-  background-image: url('https://media.giphy.com/media/SIPIe590rx6iA/giphy.gif');
+  background-image: url('https://media.giphy.com/media/mJHSkWKziszrkcNJPo/giphy.gif');
   background-position: center;
   background-repeat: no-repeat;
   display: none;
   position: absolute;
+  z-index: 10;
   top: 0;
   right: 0;
   left: 0;
@@ -60,14 +83,16 @@ main {
   bottom: 0;
 }
 
-.gameover h1 {
+.gameover h1,
+.won h1 {
   display: block;
   margin-top: 138px;
   text-align: center;
   font-size: 2.5rem;
 }
 
-.gameover button {
+.gameover button,
+.won button {
   outline: none;
   transition: 0.3s;
   display: block;
@@ -81,8 +106,21 @@ main {
   font-weight: bolder;
 }
 
-.gameover button:hover {
+.gameover button:hover,
+.won button:hover {
   transform: scale(1.2);
+}
+
+@keyframes bigger {
+
+  from,
+  to {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.1);
+  }
 }
 
 @keyframes blink {

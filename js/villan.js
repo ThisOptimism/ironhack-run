@@ -73,7 +73,7 @@ class Villan {
 
     push();
     textSize('25');
-    text('ELON M. WEALTH', 400, 120);
+    text('ELON M. BOSSLEVEL', 400, 120);
     pop();
   }
 
