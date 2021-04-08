@@ -8,7 +8,6 @@ class Shot {
   }
   draw() {
     image(game.shotImg, this.x, this.y, this.width, this.height)
-    // rect(this.x, this.y, this.width, this.height)
     this.x += 19
   }
   collision(objectInfo) {

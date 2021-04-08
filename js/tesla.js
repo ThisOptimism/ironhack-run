@@ -1,13 +1,12 @@
 class Tesla {
   constructor() {
     this.x = width;
-    this.y = 460;
-    this.height = 110;
-    this.width = 250;
+    this.y = 470;
+    this.height = 100;
+    this.width = 333;
   }
   draw() {
     image(game.teslaImg, this.x, this.y, this.width, this.height)
-    // rect(this.x, this.y, this.width, this.height);
     this.x -= 13 * game.gameSpeed;
   }
   collision(playerInfo) {
@@ -16,7 +15,7 @@ class Tesla {
     const playerX = playerInfo.x + playerInfo.width / 2;
     const playerY = playerInfo.y + playerInfo.height / 2;
 
-    if (dist(teslaX, teslaY, playerX, playerY) > 90) {
+    if (dist(teslaX, teslaY, playerX, playerY) > 150) {
       return false
     } else {
       game.player.health -= 20;
