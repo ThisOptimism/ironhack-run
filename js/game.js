@@ -20,6 +20,7 @@ class Game {
 
     this.teslaArr = [];
     this.teslaImg;
+    this.teslaLogo;
 
     this.gameoverSound;
     this.gameoverSoundCounter = 0;
@@ -49,6 +50,7 @@ class Game {
     this.foregroundImageNight = loadImage('assets/images/background/night/fg1.png');
     this.dogImage = loadImage('assets/images/background/day/dog.gif');
     this.winnerCoin = loadImage('assets/images/winnercoin.png')
+    this.teslaLogo = loadImage('assets/images/logotesla.png')
 
     // sounds
     this.shotSound = loadSound('assets/sound/shot.wav');
@@ -150,6 +152,7 @@ class Game {
     if (this.player.health <= 0) {
       document.querySelector('.gameover').style.display = "block";
       background('rgba(0, 0, 0, 0.4)')
+      this.player.health = 0;
       this.obstacles = [];
       this.coins = [];
       this.firstAidArr = [];

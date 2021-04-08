@@ -9,10 +9,6 @@ body {
   font-family: sans-serif;
 }
 
-canvas {
-  box-shadow: 10px 5px 10px 1px black;
-}
-
 header {
   text-align: center;
 }
@@ -28,7 +24,7 @@ main {
 .flex {
   display: flex;
   justify-content: space-around;
-  align-items: baseline;
+  align-items: center;
 }
 
 .menu {
@@ -39,7 +35,6 @@ main {
   right: 0;
   left: 0;
   bottom: 0;
-  background-color: turquoise;
 }
 
 .menu p {

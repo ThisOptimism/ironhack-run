@@ -32,10 +32,10 @@ class Villan {
       this.speed += 0.1;
     }
     this.getDamage();
-    if (frameCount % 400 === 0) {
+    if (frameCount % 370 === 0) {
       this.jump();
     }
-    if (frameCount % 120 === 0) {
+    if (frameCount % 170 === 0) {
       this.bullets.push(this.bullet = new ShotVillan())
     }
 
@@ -63,13 +63,13 @@ class Villan {
     push()
     stroke('black')
     fill('white')
-    rect(this.x - 30, this.y - 21, 150, 12);
+    rect(this.x - 25, this.y - 21, 150, 12);
     pop()
 
     push();
     noStroke();
     fill('rgb(0,255,0)');
-    rect(this.x + 1 - 30, this.y - 20, this.health - 2, 10);
+    rect(this.x + 1 - 25, this.y - 20, this.health - 2, 10);
     pop();
 
     push();

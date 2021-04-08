@@ -32,8 +32,8 @@ class Player {
 
   scoreDraw() {
     textSize(26);
-    image(game.coinImage, 840, 28, 36, 27)
-    text(`${this.score} / 200`, 885, 50);
+    image(game.coinImage, 880, 28, 36, 27)
+    text(`${this.score}`, 930, 50);
   }
 
   healthBarDraw() {
@@ -49,14 +49,6 @@ class Player {
     noStroke()
     fill('rgb(0,255,0)')
     rect(21, 31, this.health - 2, 18)
-    pop()
-
-
-    // white space
-    push()
-    noStroke()
-    fill('white')
-    rect(0, 30, 18, 20)
     pop()
 
     // red cross
@@ -84,6 +76,7 @@ class Player {
     if (keyCode === 80) {
       if (this.score > 0) {
         this.bullets.push(this.gun = new Shot())
+        game.shotSound.setVolume(0.3);
         game.shotSound.play();
         this.score--
       }
