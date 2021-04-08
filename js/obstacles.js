@@ -24,6 +24,6 @@ class Obstacles {
   }
   draw() {
     image(game.obstacleImage, this.x, this.y, this.width, this.height);
-    this.x -= 10 * game.gameSpeed;
+    this.x -= 11 * game.gameSpeed;
   }
 }

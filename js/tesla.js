@@ -1,12 +1,13 @@
 class Tesla {
   constructor() {
     this.x = width;
-    this.y = 450;
-    this.height = 100;
-    this.width = 200;
+    this.y = 460;
+    this.height = 120;
+    this.width = 250;
   }
   draw() {
-    rect(this.x, this.y, this.width, this.height);
+    image(game.teslaImg, this.x, this.y, this.width, this.height)
+    // rect(this.x, this.y, this.width, this.height);
     this.x -= 13 * game.gameSpeed;
   }
   collision(playerInfo) {

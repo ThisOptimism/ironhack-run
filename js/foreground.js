@@ -34,8 +34,8 @@ class Foreground {
     //  Level #3
     if (game.background.turns >= 60) {
       image(game.dogImage, this.x2 + 400, 0, width, height);
-      image(game.foregroundImage, this.x, 0, width, height);
-      image(game.foregroundImage, this.x + width, 0, width, height);
+      image(game.foregroundImageEndgame, this.x, 0, width, height);
+      image(game.foregroundImageEndgame, this.x + width, 0, width, height);
       this.x2 = 0;
     }
   }

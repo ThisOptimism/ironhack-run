@@ -22,7 +22,6 @@ class Villan {
     // health bar
     this.healtBar();
     image(game.villanImg, this.x, this.y, this.width, this.height)
-    // rect(this.x, this.y, this.width, this.height);
 
     // move left - right
     this.x += this.speed;
@@ -33,7 +32,7 @@ class Villan {
       this.speed += 0.1;
     }
     this.getDamage();
-    if (frameCount % 370 === 0) {
+    if (frameCount % 246 === 0) {
       this.jump();
     }
     if (frameCount % 170 === 0) {
@@ -52,7 +51,7 @@ class Villan {
         return false
       } else {
         game.villanHurt.play();
-        this.health -= 20
+        this.health -= 10;
         game.player.bullets.splice(game.player.bullets.indexOf(bullet), 1)
         return true
       }
@@ -75,7 +74,7 @@ class Villan {
 
     push();
     textSize('25');
-    text('ELON M. BOSSLEVEL', 400, 120);
+    text('FIGHT ELON', 390, 110);
     pop();
   }
 

@@ -32,13 +32,12 @@ class Background {
     }
     // level #3
     if (this.turns >= 60) {
-      game.backgroundImages.forEach(bgImg => {
-        bgImg.x = 0;
+      game.backgroundImagesEndgame.forEach(bgImg => {
+        bgImg.x -= bgImg.speed;
         image(bgImg.src, bgImg.x, 0, width, height)
         image(bgImg.src, bgImg.x + width, 0, width, height)
         if (bgImg.x <= -width) {
           bgImg.x = 0;
-          this.turns++
         }
       })
     }

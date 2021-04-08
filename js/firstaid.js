@@ -22,8 +22,11 @@ class firstAid {
       if (!game.eatSound.isPlaying()) {
         game.eatSound.play();
       }
+      if (game.player.health >= 130) {
+        game.player.health = 150;
+      }
       if (game.player.health < 150) {
-        game.player.health += 10;
+        game.player.health += 30;
       }
       return true
     }

@@ -23,7 +23,7 @@ class Coin {
     if (dist(coinX, coinY, playerX, playerY) > 80) {
       return false
     } else {
-      game.player.score++;
+      game.player.score += 5;
       game.coinSound.play();
       game.coinSound.setVolume(0.2)
       return true

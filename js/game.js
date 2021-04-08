@@ -6,6 +6,8 @@ class Game {
     this.playerImage;
     this.backgroundImages;
     this.foregroundImage;
+    this.backgroundImagesEndgame;
+    this.foregroundImageEndgame
     this.villanImg;
 
     this.coins = [];
@@ -53,9 +55,11 @@ class Game {
     this.obstacleImage = loadImage('assets/images/coronavirus.png');
     this.foregroundImage = loadImage('assets/images/background/day/fg1.png');
     this.foregroundImageNight = loadImage('assets/images/background/night/fg1.png');
+    this.foregroundImageEndgame = loadImage('assets/images/background/endgame/fg1.png');
     this.dogImage = loadImage('assets/images/background/day/dog.gif');
     this.winnerCoin = loadImage('assets/images/winnercoin.png')
     this.teslaLogo = loadImage('assets/images/logotesla.png')
+    this.teslaImg = loadImage('assets/images/tesla.png')
     this.villanImg = loadImage('assets/images/elon.gif')
 
     // sounds
@@ -114,6 +118,32 @@ class Game {
         speed: 6 * this.gameSpeed
       }
     ]
+
+    this.backgroundImagesEndgame = [{
+        src: loadImage('assets/images/background/endgame/bg5.png'),
+        x: 0,
+        speed: 0 * this.gameSpeed
+      }, {
+        src: loadImage('assets/images/background/endgame/bg4.png'),
+        x: 0,
+        speed: 1 * this.gameSpeed
+      },
+      {
+        src: loadImage('assets/images/background/endgame/bg3.png'),
+        x: 0,
+        speed: 0 * this.gameSpeed
+      },
+      {
+        src: loadImage('assets/images/background/endgame/bg2.png'),
+        x: 0,
+        speed: 0 * this.gameSpeed
+      },
+      {
+        src: loadImage('assets/images/background/endgame/bg1.png'),
+        x: 0,
+        speed: 0 * this.gameSpeed
+      }
+    ]
   }
 
   draw() {
@@ -131,6 +161,7 @@ class Game {
       }
       if (this.player.level === 3) {
         this.villan.draw();
+        this.obstacleFreq = 10000;
       }
       this.player.draw();
       this.shoot();
@@ -173,6 +204,7 @@ class Game {
         this.gameoverSound.play();
         this.gameoverSoundCounter++
       }
+      frameRate(0)
     }
   }
 
@@ -230,6 +262,7 @@ class Game {
     if (this.background.turns === 30) {
       game.player.level = 2;
       game.gameSpeed = 1.5;
+      game.obstacleFreq = 110;
     }
     if (this.background.turns === 60) {
       if (!this.bossIntro.isPlaying()) {
@@ -275,7 +308,7 @@ class Game {
   }
 
   drawCoin() {
-    if (frameCount % 300 === 0) {
+    if (frameCount % 181 === 0) {
       this.coins.push(this.coin = new Coin());
     }
     this.coins.forEach(coin => {
@@ -290,7 +323,7 @@ class Game {
     })
   }
   drawTesla() {
-    if (frameCount % 200 === 0) {
+    if (frameCount % 247 === 0) {
       this.teslaArr.push(this.tesla = new Tesla());
     }
     this.teslaArr.forEach(tesla => {
