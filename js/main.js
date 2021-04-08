@@ -18,8 +18,8 @@ function preload() {
 function draw() {
   clear();
   if (!menuSong.isPlaying() && game.mode === 0) {
-    
-    menuSong.play();
+
+    menuSong.loop();
   }
   game.draw();
 }
