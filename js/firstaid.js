@@ -19,6 +19,9 @@ class firstAid {
     if (dist(pizzaX, pizzaY, playerX, playerY) > 100) {
       return false
     } else {
+      if (!game.eatSound.isPlaying()) {
+        game.eatSound.play();
+      }
       if (game.player.health < 150) {
         game.player.health += 10;
       }

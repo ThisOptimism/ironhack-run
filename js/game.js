@@ -9,6 +9,7 @@ class Game {
 
     this.coins = [];
     this.coinImage;
+    this.winnerCoin;
     this.coinSound;
 
     this.obstacles = [];
@@ -27,6 +28,8 @@ class Game {
     this.dogImage;
     this.shotSound;
     this.blopSound;
+    this.eatSound;
+    this.villanHurt;
 
   }
   setup() {
@@ -45,6 +48,7 @@ class Game {
     this.foregroundImage = loadImage('assets/images/background/day/fg1.png');
     this.foregroundImageNight = loadImage('assets/images/background/night/fg1.png');
     this.dogImage = loadImage('assets/images/background/day/dog.gif');
+    this.winnerCoin = loadImage('assets/images/winnercoin.png')
 
     // sounds
     this.shotSound = loadSound('assets/sound/shot.wav');
@@ -52,7 +56,9 @@ class Game {
     this.gettingHitSound = loadSound('assets/sound/hit.wav');
     this.jumpSound = loadSound('assets/sound/jump.wav');
     this.gameoverSound = loadSound('assets/sound/gameover.wav');
-    this.blopSound = loadSound('assets/sound/blop.wav')
+    this.blopSound = loadSound('assets/sound/blop.wav');
+    this.eatSound = loadSound('assets/sound/eat.wav');
+    this.villanHurt = loadSound('assets/sound/villanhurt.wav');
 
     // background images
     this.backgroundImages = [{

@@ -20,6 +20,7 @@ function preload() {
 
 function draw() {
   clear();
+  frameRate(60)
   game.draw();
 }
 

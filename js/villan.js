@@ -50,6 +50,7 @@ class Villan {
       if (dist(villanX + 10, villanY - 20, bulletX, bulletY) > 90) {
         return false
       } else {
+        game.villanHurt.play();
         this.health -= 20
         game.player.bullets.splice(game.player.bullets.indexOf(bullet), 1)
         return true

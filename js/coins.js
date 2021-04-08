@@ -4,11 +4,14 @@ class Coin {
     this.y = (Math.random() * height) / 2 + 150
     this.width = 36;
     this.height = 27;
-    this.image;
   }
   draw() {
     image(game.coinImage, this.x, this.y, this.width, this.height)
     this.x -= 5 * game.gameSpeed;
+    if (game.villan.health <= 0) {
+      image(game.winnerCoin, this.x, this.y, this.width, this.height)
+      this.x -= 5 * game.gameSpeed;
+    }
   }
 
   collision(playerInfo) {
