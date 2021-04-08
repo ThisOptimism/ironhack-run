@@ -7,9 +7,8 @@ class ShotVillan {
     this.damage = 20;
   }
   draw() {
-    // rect(this.x, this.y, this.width, this.height)
     image(game.teslaLogo, this.x, this.y, this.width, this.height)
-    this.x -= 19
+    this.x -= 17
   }
   collision(objectInfo) {
     const bulletX = this.x + this.width / 2;

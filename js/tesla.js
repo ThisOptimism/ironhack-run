@@ -7,7 +7,7 @@ class Tesla {
   }
   draw() {
     rect(this.x, this.y, this.width, this.height);
-    this.x -= 12 * game.gameSpeed;
+    this.x -= 13 * game.gameSpeed;
   }
   collision(playerInfo) {
     const teslaX = this.x + this.width / 2;
@@ -21,7 +21,6 @@ class Tesla {
       game.player.health -= 20;
       game.gettingHitSound.play();
       return true
-      console.log('hit by tesla')
     }
   }
 }

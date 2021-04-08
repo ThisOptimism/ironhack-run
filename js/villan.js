@@ -21,7 +21,8 @@ class Villan {
     this.y = constrain(this.y, 0, height - this.height - 30);
     // health bar
     this.healtBar();
-    rect(this.x, this.y, this.width, this.height);
+    image(game.villanImg, this.x, this.y, this.width, this.height)
+    // rect(this.x, this.y, this.width, this.height);
 
     // move left - right
     this.x += this.speed;

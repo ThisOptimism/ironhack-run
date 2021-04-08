@@ -6,6 +6,7 @@ class Game {
     this.playerImage;
     this.backgroundImages;
     this.foregroundImage;
+    this.villanImg;
 
     this.coins = [];
     this.coinImage;
@@ -21,6 +22,7 @@ class Game {
     this.teslaArr = [];
     this.teslaImg;
     this.teslaLogo;
+    this.bossIntro;
 
     this.gameoverSound;
     this.gameoverSoundCounter = 0;
@@ -31,6 +33,8 @@ class Game {
     this.blopSound;
     this.eatSound;
     this.villanHurt;
+    this.winnersong;
+
 
   }
   setup() {
@@ -52,6 +56,7 @@ class Game {
     this.dogImage = loadImage('assets/images/background/day/dog.gif');
     this.winnerCoin = loadImage('assets/images/winnercoin.png')
     this.teslaLogo = loadImage('assets/images/logotesla.png')
+    this.villanImg = loadImage('assets/images/elon.gif')
 
     // sounds
     this.shotSound = loadSound('assets/sound/shot.wav');
@@ -59,9 +64,11 @@ class Game {
     this.gettingHitSound = loadSound('assets/sound/hit.wav');
     this.jumpSound = loadSound('assets/sound/jump.wav');
     this.gameoverSound = loadSound('assets/sound/gameover.wav');
+    this.winnersong = loadSound('assets/sound/winnersong.mp3');
     this.blopSound = loadSound('assets/sound/blop.wav');
     this.eatSound = loadSound('assets/sound/eat.wav');
     this.villanHurt = loadSound('assets/sound/villanhurt.wav');
+    this.bossIntro = loadSound('assets/sound/bossintro.wav');
 
     // background images
     this.backgroundImages = [{
@@ -119,10 +126,11 @@ class Game {
       this.drawFirstAid()
       this.drawObstacles();
       this.drawCoin();
-
+      if (this.player.level > 1) {
+        this.drawTesla();
+      }
       if (this.player.level === 3) {
         this.villan.draw();
-        this.drawTesla();
       }
       this.player.draw();
       this.shoot();
@@ -175,9 +183,15 @@ class Game {
       this.obstacles = [];
       this.firstAidArr = [];
       this.teslaArr = [];
+      this.villan.x = 1100;
       this.coins.push(this.coin = new Coin);
       game.villan.health = 0;
       game.villan.bullets = [];
+      if (!this.winnersong.isPlaying()) {
+        this.winnersong.play();
+      }
+      song.pause();
+      this.bossIntro.pause();
     }
   }
   shoot() {
@@ -214,14 +228,17 @@ class Game {
     text(`LEVEL ${this.player.level}`, 460, 50);
     pop();
     if (this.background.turns === 30) {
-
       game.player.level = 2;
       game.gameSpeed = 1.5;
     }
     if (this.background.turns === 60) {
+      if (!this.bossIntro.isPlaying()) {
+        this.bossIntro.play();
+      }
       this.player.level = 3;
       this.player.moveLeftSpeed = 10;
       this.player.moveRightSpeed = 10;
+      song.pause();
     }
   }
 
@@ -258,7 +275,7 @@ class Game {
   }
 
   drawCoin() {
-    if (frameCount % 400 === 0) {
+    if (frameCount % 300 === 0) {
       this.coins.push(this.coin = new Coin());
     }
     this.coins.forEach(coin => {
