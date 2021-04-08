@@ -3,10 +3,12 @@ let song;
 let menuSong;
 
 function setup() {
-  createCanvas(1000, 600);
+  let canvas = createCanvas(1000, 600);
+  canvas.parent('game')
   if (menuSong.isLoaded()) {
     menuSong.loop();
   }
+
 }
 
 function preload() {

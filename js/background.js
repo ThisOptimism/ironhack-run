@@ -20,6 +20,7 @@ class Background {
     // TransitionEvent
     // Level #2
     if (this.turns >= 30 && this.turns < 60) {
+      song.rate(1.03)
       game.backgroundImagesNight.forEach(bgImg => {
         bgImg.x -= bgImg.speed
         image(bgImg.src, bgImg.x, 0, width, height)
@@ -30,7 +31,7 @@ class Background {
         }
       })
     }
-
+    // level #3
     if (this.turns >= 60) {
       game.backgroundImages.forEach(bgImg => {
         bgImg.x = 0;

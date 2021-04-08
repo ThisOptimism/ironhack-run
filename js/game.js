@@ -6,7 +6,6 @@ class Game {
     this.playerImage;
     this.backgroundImages;
     this.foregroundImage;
-    this.mySound;
 
     this.coins = [];
     this.coinImage;
@@ -204,6 +203,7 @@ class Game {
     text(`LEVEL ${this.player.level}`, 460, 50);
     pop();
     if (this.background.turns === 30) {
+     
       game.player.level = 2;
       game.gameSpeed = 1.5;
     }

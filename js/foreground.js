@@ -5,7 +5,7 @@ class Foreground {
     this.turns = 0;
   }
   draw() {
-    // Level 1
+    // Level #1
     if (game.background.turns < 30) {
       image(game.dogImage, this.x2 + 400, 0, width, height);
       image(game.foregroundImage, this.x, 0, width, height);
@@ -21,7 +21,7 @@ class Foreground {
       }
     }
     // transition
-    // Level 2
+    // Level #2
     if (game.background.turns >= 30 && game.background.turns < 60) {
       image(game.foregroundImageNight, this.x, 0, width, height)
       image(game.foregroundImageNight, this.x + width, 0, width, height)
@@ -31,7 +31,7 @@ class Foreground {
       }
     }
 
-    // final Level
+    //  Level #3
     if (game.background.turns >= 60) {
       image(game.dogImage, this.x2 + 400, 0, width, height);
       image(game.foregroundImage, this.x, 0, width, height);
