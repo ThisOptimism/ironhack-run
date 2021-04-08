@@ -5,10 +5,7 @@ let menuSong;
 function setup() {
   let canvas = createCanvas(1000, 600);
   canvas.parent('game')
-  if (!menuSong.isPlaying()) {
-    menuSong.play();
-    menuSong.loop();
-  }
+
 }
 
 function preload() {
@@ -20,7 +17,9 @@ function preload() {
 
 function draw() {
   clear();
-  frameRate(60)
+  if (!menuSong.isPlaying() && game.mode === 0) {
+    menuSong.loop();
+  }
   game.draw();
 }
 
@@ -38,6 +37,6 @@ function keyPressed() {
       song.loop();
       menuSong.pause();
     }
-    frameRate(50)
+    frameRate(60)
   }
 }

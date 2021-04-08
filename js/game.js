@@ -39,6 +39,7 @@ class Game {
     this.villan = new Villan();
     this.background = new Background();
     this.foreground = new Foreground();
+
   }
   preload() {
     // images
