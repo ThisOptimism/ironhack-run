@@ -1,7 +1,7 @@
 class ShotVillan {
   constructor() {
     this.x = game.villan.x + game.villan.width / 2;
-    this.y = game.villan.y + game.villan.height / 4;
+    this.y = game.villan.y + game.villan.height / 3.5;
     this.width = 25;
     this.height = 25;
     this.damage = 20;

@@ -6,6 +6,7 @@ function setup() {
   let canvas = createCanvas(1000, 600);
   canvas.parent('game')
   if (!menuSong.isPlaying()) {
+    menuSong.play();
     menuSong.loop();
   }
 }
