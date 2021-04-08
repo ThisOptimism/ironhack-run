@@ -2,7 +2,7 @@ class Tesla {
   constructor() {
     this.x = width;
     this.y = 460;
-    this.height = 120;
+    this.height = 110;
     this.width = 250;
   }
   draw() {

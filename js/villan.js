@@ -74,7 +74,7 @@ class Villan {
 
     push();
     textSize('25');
-    text('FIGHT ELON', 390, 110);
+    text('FIGHT ELON', 435, 120);
     pop();
   }
 

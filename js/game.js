@@ -164,6 +164,7 @@ class Game {
         this.drawTesla();
       }
       if (this.player.level === 3) {
+        this.gameSpeed = 1;
         this.villan.draw();
         this.obstacleFreq = 10000;
       }
@@ -265,13 +266,14 @@ class Game {
     pop();
     if (this.background.turns === 30) {
       game.player.level = 2;
-      game.gameSpeed = 1.5;
+      game.gameSpeed = 1.4;
       game.obstacleFreq = 110;
     }
     if (this.background.turns === 60) {
       if (!this.bossIntro.isPlaying()) {
         this.bossIntro.play();
       }
+      this.gameSpeed = 1.2
       this.player.level = 3;
       this.player.moveLeftSpeed = 10;
       this.player.moveRightSpeed = 10;
