@@ -2,12 +2,13 @@ class Shot {
   constructor() {
     this.x = game.player.x + game.player.width / 2;
     this.y = game.player.y + game.player.height / 3;
-    this.width = 20;
-    this.height = 20;
+    this.width = 30;
+    this.height = 30;
     this.damage = 20;
   }
   draw() {
-    rect(this.x, this.y, this.width, this.height)
+    image(game.shotImg, this.x, this.y, this.width, this.height)
+    // rect(this.x, this.y, this.width, this.height)
     this.x += 19
   }
   collision(objectInfo) {

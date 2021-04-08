@@ -9,6 +9,7 @@ class Game {
     this.backgroundImagesEndgame;
     this.foregroundImageEndgame
     this.villanImg;
+    this.shotImg;
 
     this.coins = [];
     this.coinImage;
@@ -31,6 +32,7 @@ class Game {
     this.jumpSound;
     this.gettingHitSound;
     this.dogImage;
+    this.catImage;
     this.shotSound;
     this.blopSound;
     this.eatSound;
@@ -51,12 +53,14 @@ class Game {
     // images
     this.coinImage = loadImage('assets/images/lab.png');
     this.playerImage = loadImage('assets/images/steffen.gif');
+    this.shotImg = loadImage('assets/images/shot.png');
     this.firstAidImage = loadImage('assets/images/pizza.png');
     this.obstacleImage = loadImage('assets/images/coronavirus.png');
     this.foregroundImage = loadImage('assets/images/background/day/fg1.png');
     this.foregroundImageNight = loadImage('assets/images/background/night/fg1.png');
     this.foregroundImageEndgame = loadImage('assets/images/background/endgame/fg1.png');
     this.dogImage = loadImage('assets/images/background/day/dog.gif');
+    this.catImage = loadImage('assets/images/background/night/cat.gif');
     this.winnerCoin = loadImage('assets/images/winnercoin.png')
     this.teslaLogo = loadImage('assets/images/logotesla.png')
     this.teslaImg = loadImage('assets/images/tesla.png')
@@ -292,7 +296,7 @@ class Game {
   }
 
   drawFirstAid() {
-    if (frameCount % 1000 === 0) {
+    if (frameCount % 834 === 0) {
       this.firstAidArr.push(this.firstAid = new firstAid());
     }
     this.firstAidArr.forEach(firstAid => {
