@@ -43,7 +43,7 @@ class Game {
     this.firstAidImage = loadImage('assets/images/pizza.png');
     this.obstacleImage = loadImage('assets/images/coronavirus.png');
     this.foregroundImage = loadImage('assets/images/background/day/fg1.png');
-    this.foregroundImageNight = loadImage('assets/images/background/night/FG1.png');
+    this.foregroundImageNight = loadImage('assets/images/background/night/fg1.png');
     this.dogImage = loadImage('assets/images/background/day/dog.gif');
 
     // sounds
@@ -77,22 +77,22 @@ class Game {
     ]
     // bachground Images Day
     this.backgroundImagesNight = [{
-        src: loadImage('assets/images/background/night/BG4.png'),
+        src: loadImage('assets/images/background/night/bg4.png'),
         x: 0,
         speed: 1 * this.gameSpeed
       },
       {
-        src: loadImage('assets/images/background/night/BG3.png'),
+        src: loadImage('assets/images/background/night/bg3.png'),
         x: 0,
         speed: 1.5 * this.gameSpeed
       },
       {
-        src: loadImage('assets/images/background/night/BG2.png'),
+        src: loadImage('assets/images/background/night/bg2.png'),
         x: 0,
         speed: 2 * this.gameSpeed
       },
       {
-        src: loadImage('assets/images/background/night/BG1.png'),
+        src: loadImage('assets/images/background/night/bg1.png'),
         x: 0,
         speed: 6 * this.gameSpeed
       }
@@ -203,7 +203,7 @@ class Game {
     text(`LEVEL ${this.player.level}`, 460, 50);
     pop();
     if (this.background.turns === 30) {
-  
+
       game.player.level = 2;
       game.gameSpeed = 1.5;
     }
