@@ -5,7 +5,7 @@ let menuSong;
 function setup() {
   let canvas = createCanvas(1000, 600);
   canvas.parent('game')
-  if (menuSong.isLoaded()) {
+  if (!menuSong.isPlaying()) {
     menuSong.loop();
   }
 
