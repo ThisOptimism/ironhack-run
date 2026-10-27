@@ -1,3 +1,8 @@
+// load every path in { name: path } with `load`, keeping the names
+function loadAll(paths, load) {
+  return Object.fromEntries(Object.entries(paths).map(([name, path]) => [name, load(path)]));
+}
+
 class Game {
   constructor() {
     this.mode;
@@ -5,37 +10,15 @@ class Game {
     this.levelNumber = 1;
     this.level = LEVELS[0];
     this.levelArt = [];
-    this.playerImage;
-    this.villainImg;
-    this.shotImg;
-
+    this.images = {};
+    this.sounds = {};
     this.coins = [];
-    this.coinImage;
-    this.winnerCoin;
-    this.coinSound;
-
     this.obstacles = [];
-    this.obstacleImage;
-
     this.firstAids = [];
-    this.firstAidImage;
-
     this.teslas = [];
-    this.teslaImg;
-    this.teslaLogo;
-    this.bossIntro;
-
-    this.gameoverSound;
-    this.jumpSound;
-    this.gettingHitSound;
-    this.shotSound;
-    this.blopSound;
-    this.eatSound;
-    this.villainHurt;
-    this.winnersong;
   }
   setup() {
-    this.mode = MODE.MENU
+    this.mode = MODE.MENU;
     this.roundOver = false;
     this.obstacles = [];
     this.coins = [];
@@ -48,44 +31,32 @@ class Game {
     this.setLevel(1);
   }
   preload() {
-    // images
-    this.coinImage = loadImage('assets/images/lab.png');
-    this.playerImage = loadImage('assets/images/steffen.gif');
-    this.shotImg = loadImage('assets/images/shot.png');
-    this.firstAidImage = loadImage('assets/images/pizza.png');
-    this.obstacleImage = loadImage('assets/images/coronavirus.png');
-    this.winnerCoin = loadImage('assets/images/winnercoin.png')
-    this.teslaLogo = loadImage('assets/images/logotesla.png')
-    this.teslaImg = loadImage('assets/images/tesla.png')
-    this.villainImg = loadImage('assets/images/elon.gif')
-
-    // small sounds needed right away
-    this.coinSound = loadSound('assets/sound/coin.wav');
-    this.gettingHitSound = loadSound('assets/sound/hit.wav');
-    this.jumpSound = loadSound('assets/sound/jump.wav');
-    this.blopSound = loadSound('assets/sound/blop.wav');
+    this.images = loadAll(IMAGES, loadImage);
+    this.sounds = loadAll(SOUNDS, loadSound);
 
     // background, foreground and animal for each level
     const images = {};
-    const load = path => images[path] = images[path] || loadImage(path);
-    this.levelArt = LEVELS.map(level => {
+    const load = (path) => (images[path] = images[path] || loadImage(path));
+    this.levelArt = LEVELS.map((level) => {
       const folder = `assets/images/background/${level.folder}`;
       return {
-        layers: level.layers.map(layer => ({ img: load(`${folder}/${layer.file}`), speed: layer.speed })),
+        layers: level.layers.map((layer) => ({
+          img: load(`${folder}/${layer.file}`),
+          speed: layer.speed,
+        })),
         foreground: load(`${folder}/fg1.png`),
-        animal: load(level.animal)
+        animal: load(level.animal),
       };
-    })
+    });
   }
 
   // bigger sounds, loaded in the background from setup()
   loadSounds() {
-    this.shotSound = loadSound('assets/sound/shot.wav');
-    this.gameoverSound = loadSound('assets/sound/gameover.wav');
-    this.winnersong = loadSound('assets/sound/winnersong.mp3');
-    this.eatSound = loadSound('assets/sound/eat.wav');
-    this.villainHurt = loadSound('assets/sound/villainhurt.wav');
-    this.bossIntro = loadSound('assets/sound/bossintro.m4a');
+    Object.assign(this.sounds, loadAll(BACKGROUND_SOUNDS, loadSound));
+    // the menu song starts as soon as it has loaded
+    this.sounds.menuMusic = loadSound('assets/sound/song1.m4a', () => {
+      if (this.mode === MODE.MENU) this.sounds.menuMusic.loop();
+    });
   }
 
   setLevel(number) {
@@ -97,8 +68,8 @@ class Game {
     this.background.setLevel(this.levelArt[number - 1]);
     this.foreground.setLevel(this.levelArt[number - 1], this.level.foregroundScrolls);
     if (this.level.boss) {
-      song.pause();
-      playSound(this.bossIntro);
+      this.sounds.music.pause();
+      playSound(this.sounds.bossIntro);
     }
   }
 
@@ -110,35 +81,35 @@ class Game {
   restart() {
     this.setup();
     this.mode = MODE.PLAYING;
-    this.winnersong.stop();
-    this.bossIntro.stop();
-    this.gameoverSound.stop();
-    document.querySelector('.gameover').style.display = "none";
-    document.querySelector('.won').style.display = "none";
-    song.stop();
-    song.setVolume(0.6);
-    loopSound(song);
+    this.sounds.winnerSong.stop();
+    this.sounds.bossIntro.stop();
+    this.sounds.gameOver.stop();
+    document.querySelector('.gameover').style.display = 'none';
+    document.querySelector('.won').style.display = 'none';
+    this.sounds.music.stop();
+    this.sounds.music.setVolume(0.6);
+    loopSound(this.sounds.music);
     loop();
   }
 
   pauseMusic() {
-    song.pause();
-    this.bossIntro.pause();
+    this.sounds.music.pause();
+    this.sounds.bossIntro.pause();
   }
 
   resumeMusic() {
-    if (this.bossIntro.isPaused()) {
-      playSound(this.bossIntro);
-    } else if (!song.isPlaying()) {
-      song.setVolume(0.6);
-      loopSound(song);
+    if (this.sounds.bossIntro.isPaused()) {
+      playSound(this.sounds.bossIntro);
+    } else if (!this.sounds.music.isPlaying()) {
+      this.sounds.music.setVolume(0.6);
+      loopSound(this.sounds.music);
     }
   }
 
   draw() {
     if (this.mode === MODE.MENU) {
-      noLoop()
-      return
+      noLoop();
+      return;
     }
     if (this.mode === MODE.PLAYING) {
       this.update();
@@ -149,7 +120,7 @@ class Game {
       textSize(32);
       text('– PAUSE –', 420, 300);
       textSize(16);
-      text('Press "Enter" to resume', 417, 335)
+      text('Press "Enter" to resume', 417, 335);
     }
   }
 
@@ -168,8 +139,8 @@ class Game {
     if (this.level.boss && !this.roundOver) {
       this.villain.update();
       // back to the main song once the boss intro is over
-      if (!this.bossIntro.isPlaying() && !song.isPlaying()) {
-        loopSound(song);
+      if (!this.sounds.bossIntro.isPlaying() && !this.sounds.music.isPlaying()) {
+        loopSound(this.sounds.music);
       }
     }
     this.player.update();
@@ -183,19 +154,19 @@ class Game {
   // draw everything back to front, without changing any state
   render() {
     this.background.draw();
-    [this.firstAids, this.obstacles, this.coins, this.teslas].forEach(list => {
-      list.forEach(entity => entity.draw());
-    })
+    [this.firstAids, this.obstacles, this.coins, this.teslas].forEach((list) => {
+      list.forEach((entity) => entity.draw());
+    });
     if (this.level.boss && !this.roundOver) {
       this.villain.draw();
     }
     this.player.draw();
-    this.player.bullets.forEach(bullet => bullet.draw());
-    this.villain.bullets.forEach(bullet => bullet.draw());
+    this.player.bullets.forEach((bullet) => bullet.draw());
+    this.villain.bullets.forEach((bullet) => bullet.draw());
     this.foreground.draw();
-    this.player.healthBarDraw();
-    this.player.scoreDraw();
-    this.levelStatusDraw();
+    this.player.drawHealthBar();
+    this.player.drawScore();
+    this.drawLevel();
     if (this.roundOver) {
       background('rgba(0, 0, 0, 0.4)');
     }
@@ -209,16 +180,16 @@ class Game {
 
   // move everything in the list, then drop what hit the player or left the screen
   updateEntities(list) {
-    list.forEach(entity => {
+    list.forEach((entity) => {
       entity.update();
-    })
-    return list.filter(entity => {
+    });
+    return list.filter((entity) => {
       if (entity.hitRadius && centersWithin(entity, this.player, entity.hitRadius)) {
         entity.hitPlayer(this.player);
-        return false
+        return false;
       }
-      return entity.x > -entity.width
-    })
+      return entity.x > -entity.width;
+    });
   }
 
   checkRoundOver() {
@@ -227,15 +198,15 @@ class Game {
       if (frameCount % 10 === 0) {
         this.coins.push(new WinnerCoin());
       }
-      if (!this.winnersong.isPlaying()) {
-        playSound(this.winnersong);
+      if (!this.sounds.winnerSong.isPlaying()) {
+        playSound(this.sounds.winnerSong);
       }
-      return
+      return;
     }
     if (this.player.health <= 0) {
       this.endRound('.gameover');
-      playSound(this.gameoverSound);
-      noLoop()
+      playSound(this.sounds.gameOver);
+      noLoop();
     } else if (this.villain.health <= 0) {
       this.endRound('.won');
     }
@@ -243,7 +214,7 @@ class Game {
 
   endRound(overlay) {
     this.roundOver = true;
-    document.querySelector(overlay).style.display = "block";
+    document.querySelector(overlay).style.display = 'block';
     this.obstacles = [];
     this.coins = [];
     this.firstAids = [];
@@ -254,23 +225,23 @@ class Game {
   }
 
   updatePlayerBullets() {
-    this.player.bullets.forEach(bullet => {
+    this.player.bullets.forEach((bullet) => {
       bullet.update();
-    })
-    this.player.bullets = this.player.bullets.filter(bullet => {
+    });
+    this.player.bullets = this.player.bullets.filter((bullet) => {
       if (bullet.x > width) return false;
-      const target = this.obstacles.find(obs => centersWithin(bullet, obs, bullet.hitRadius));
+      const target = this.obstacles.find((obs) => centersWithin(bullet, obs, bullet.hitRadius));
       if (target) {
-        game.blopSound.setVolume(0.4);
-        game.blopSound.play();
-        this.obstacles = this.obstacles.filter(obs => obs !== target);
+        game.sounds.blop.setVolume(0.4);
+        game.sounds.blop.play();
+        this.obstacles = this.obstacles.filter((obs) => obs !== target);
         return false;
       }
       return true;
-    })
+    });
   }
 
-  levelStatusDraw() {
+  drawLevel() {
     push();
     fill('black');
     text(`LEVEL ${this.levelNumber}`, 460, 50);

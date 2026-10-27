@@ -1,7 +1,7 @@
 class Coin {
   constructor() {
     this.x = width;
-    this.y = (Math.random() * height) / 2 + 150
+    this.y = (Math.random() * height) / 2 + 150;
     this.width = 36;
     this.height = 27;
     this.hitRadius = 80;
@@ -10,12 +10,12 @@ class Coin {
     this.x -= 5 * game.gameSpeed;
   }
   draw() {
-    image(game.coinImage, this.x, this.y, this.width, this.height)
+    image(game.images.coin, this.x, this.y, this.width, this.height);
   }
   hitPlayer(player) {
     player.score += 5;
-    game.coinSound.play();
-    game.coinSound.setVolume(0.2)
+    game.sounds.coin.play();
+    game.sounds.coin.setVolume(0.2);
   }
 }
 
@@ -23,7 +23,7 @@ class Coin {
 class WinnerCoin {
   constructor() {
     this.x = width;
-    this.y = (Math.random() * height) / 2 + 150
+    this.y = (Math.random() * height) / 2 + 150;
     this.width = 36;
     this.height = 27;
   }
@@ -31,6 +31,6 @@ class WinnerCoin {
     this.x -= 10 * game.gameSpeed;
   }
   draw() {
-    image(game.winnerCoin, this.x, this.y, this.width, this.height)
+    image(game.images.winnerCoin, this.x, this.y, this.width, this.height);
   }
 }

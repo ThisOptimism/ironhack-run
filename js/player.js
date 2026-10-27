@@ -21,42 +21,42 @@ class Player {
     //  gravity
     this.velocity += this.gravity;
     this.y += this.velocity;
-    this.y += this.gravity
-    this.y = constrain(this.y, 0, this.groundY())
+    this.y += this.gravity;
+    this.y = constrain(this.y, 0, this.groundY());
   }
 
   draw() {
-    image(game.playerImage, this.x, this.y, this.width, this.height)
+    image(game.images.player, this.x, this.y, this.width, this.height);
   }
 
-  scoreDraw() {
+  drawScore() {
     textSize(26);
-    image(game.coinImage, 880, 28, 36, 27)
+    image(game.images.coin, 880, 28, 36, 27);
     text(`${this.score}`, 930, 50);
   }
 
-  healthBarDraw() {
+  drawHealthBar() {
     // white bar / frame
-    push()
-    stroke('black')
-    fill('white')
-    rect(20, 30, 150, 20)
-    pop()
+    push();
+    stroke('black');
+    fill('white');
+    rect(20, 30, 150, 20);
+    pop();
 
     // green bar
-    push()
-    noStroke()
-    fill('rgb(0,255,0)')
-    rect(21, 31, (this.health / MAX_HEALTH) * 148, 18)
-    pop()
+    push();
+    noStroke();
+    fill('rgb(0,255,0)');
+    rect(21, 31, (this.health / MAX_HEALTH) * 148, 18);
+    pop();
 
     // red cross
-    push()
-    fill('red')
-    noStroke()
-    rect(190, 30, 6, 20)
-    rect(183, 37.5, 20, 6)
-    pop()
+    push();
+    fill('red');
+    noStroke();
+    rect(190, 30, 6, 20);
+    rect(183, 37.5, 20, 6);
+    pop();
   }
   takeDamage(amount) {
     this.health = Math.max(0, this.health - amount);
@@ -65,10 +65,10 @@ class Player {
     this.health = Math.min(MAX_HEALTH, this.health + amount);
   }
   moveLeft() {
-    this.x -= this.moveLeftSpeed * game.gameSpeed / 1.5
+    this.x -= (this.moveLeftSpeed * game.gameSpeed) / 1.5;
   }
   moveRight() {
-    this.x += this.moveRightSpeed * game.gameSpeed / 1.5
+    this.x += (this.moveRightSpeed * game.gameSpeed) / 1.5;
   }
   groundY() {
     return height - this.height - GROUND_MARGIN;
@@ -77,19 +77,18 @@ class Player {
     return this.y > this.groundY() - 10;
   }
   jump() {
-    if (this.canJump())
-      this.velocity = -19;
+    if (this.canJump()) this.velocity = -19;
   }
-  keyIsPressed() {
+  handleKey() {
     if (keyCode === KEY.SPACE && this.canJump() && game.mode === MODE.PLAYING) {
-      game.jumpSound.play();
+      game.sounds.jump.play();
     }
     if (keyCode === KEY.P && game.mode === MODE.PLAYING) {
       if (this.score > 0) {
-        this.bullets.push(new Shot())
-        game.shotSound.setVolume(0.3);
-        playSound(game.shotSound);
-        this.score--
+        this.bullets.push(new Shot());
+        game.sounds.shot.setVolume(0.3);
+        playSound(game.sounds.shot);
+        this.score--;
       }
     }
   }

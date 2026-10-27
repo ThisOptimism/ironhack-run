@@ -8,9 +8,9 @@ class Shot {
     this.hitRadius = 40;
   }
   update() {
-    this.x += 19
+    this.x += 19;
   }
   draw() {
-    image(game.shotImg, this.x, this.y, this.width, this.height)
+    image(game.images.shot, this.x, this.y, this.width, this.height);
   }
 }

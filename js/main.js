@@ -1,18 +1,11 @@
 const game = new Game();
-let song;
-let menuSong;
 
 function setup() {
   let canvas = createCanvas(1000, 600);
-  canvas.parent('game')
+  canvas.parent('game');
   // browsers keep audio muted until the first click or key press
   userStartAudio();
-
-  // music is big, so it loads in the background instead of blocking the first frame
-  menuSong = loadSound("assets/sound/song1.m4a", () => {
-    if (game.mode === MODE.MENU) menuSong.loop();
-  });
-  song = loadSound("assets/sound/song.mp3");
+  // big sounds load in the background instead of blocking the first frame
   game.loadSounds();
 }
 
@@ -32,7 +25,9 @@ function loopSound(sound) {
 
 // true when the centers of a and b are at most `radius` apart
 function centersWithin(a, b, radius) {
-  return dist(a.x + a.width / 2, a.y + a.height / 2, b.x + b.width / 2, b.y + b.height / 2) <= radius;
+  return (
+    dist(a.x + a.width / 2, a.y + a.height / 2, b.x + b.width / 2, b.y + b.height / 2) <= radius
+  );
 }
 
 function draw() {
@@ -41,17 +36,17 @@ function draw() {
 }
 
 function keyPressed() {
-  game.player.keyIsPressed();
+  game.player.handleKey();
   if (keyCode === ESCAPE && game.mode === MODE.PLAYING) {
     game.mode = MODE.PAUSED;
     game.pauseMusic();
   }
 
   if (keyCode === ENTER && !game.isOver()) {
-    document.querySelector('.menu').style.display = "none";
-    game.mode = MODE.PLAYING
-    menuSong.pause();
+    document.querySelector('.menu').style.display = 'none';
+    game.mode = MODE.PLAYING;
+    game.sounds.menuMusic.pause();
     game.resumeMusic();
-    loop()
+    loop();
   }
 }

@@ -10,10 +10,10 @@ class Tesla {
     this.x -= 13 * game.gameSpeed;
   }
   draw() {
-    image(game.teslaImg, this.x, this.y, this.width, this.height)
+    image(game.images.tesla, this.x, this.y, this.width, this.height);
   }
   hitPlayer(player) {
     player.takeDamage(20);
-    game.gettingHitSound.play();
+    game.sounds.hit.play();
   }
 }

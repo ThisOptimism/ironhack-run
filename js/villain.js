@@ -27,41 +27,41 @@ class Villain {
     if (this.x < 820) {
       this.speed += 0.1;
     }
-    this.getDamage();
+    this.checkHits();
     if (frameCount % 246 === 0) {
       this.jump();
     }
     if (frameCount % 170 === 0) {
-      this.bullets.push(new ShotVillain())
+      this.bullets.push(new VillainShot());
     }
   }
 
   draw() {
-    this.healthBar();
-    image(game.villainImg, this.x, this.y, this.width, this.height)
+    this.drawHealthBar();
+    image(game.images.villain, this.x, this.y, this.width, this.height);
   }
 
-  getDamage() {
+  checkHits() {
     // the hit area sits a bit above the center, around the head and body
     const villainX = this.x + this.width / 2 + 10;
     const villainY = this.y + this.height / 2 - 20;
-    game.player.bullets = game.player.bullets.filter(bullet => {
-      const hit = dist(villainX, villainY, bullet.x + bullet.width / 2, bullet.y + bullet.height / 2) <= 90;
+    game.player.bullets = game.player.bullets.filter((bullet) => {
+      const hit =
+        dist(villainX, villainY, bullet.x + bullet.width / 2, bullet.y + bullet.height / 2) <= 90;
       if (hit) {
-        playSound(game.villainHurt);
+        playSound(game.sounds.villainHurt);
         this.health -= 10;
       }
       return !hit;
-    })
+    });
   }
 
-  healthBar() {
-
-    push()
-    stroke('black')
-    fill('white')
+  drawHealthBar() {
+    push();
+    stroke('black');
+    fill('white');
     rect(this.x - 25, this.y - 21, 150, 12);
-    pop()
+    pop();
 
     push();
     noStroke();
