@@ -8,7 +8,7 @@ class Coin {
   draw() {
     image(game.coinImage, this.x, this.y, this.width, this.height)
     this.x -= 5 * game.gameSpeed;
-    if (game.villan.health <= 0) {
+    if (game.villain.health <= 0) {
       image(game.winnerCoin, this.x, this.y, this.width, this.height)
       this.x -= 5 * game.gameSpeed;
     }
@@ -20,7 +20,8 @@ class Coin {
     const playerX = playerInfo.x + playerInfo.width / 2;
     const playerY = playerInfo.y + playerInfo.height / 2;
 
-    if (dist(coinX, coinY, playerX, playerY) > 80) {
+    // coins raining down after the win are just decoration
+    if (game.villain.health <= 0 || dist(coinX, coinY, playerX, playerY) > 80) {
       return false
     } else {
       game.player.score += 5;

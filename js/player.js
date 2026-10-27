@@ -9,13 +9,10 @@ class Player {
     this.level = 1;
     this.gravity = 0.6;
     this.velocity = 0;
-    this.playerImage;
-    this.jumpSound;
     this.bullets = [];
     this.moveRightSpeed = 5;
     this.moveLeftSpeed = 13;
   }
-  setup() {}
 
   draw() {
     if (keyIsDown(65) && this.x >= 5) this.moveLeft();
@@ -65,19 +62,22 @@ class Player {
   moveRight() {
     this.x += this.moveRightSpeed * game.gameSpeed / 1.5
   }
+  canJump() {
+    return this.y > 360;
+  }
   jump() {
-    if (this.y > 360)
+    if (this.canJump())
       this.velocity = -19;
   }
   keyIsPressed() {
-    if (keyCode === 32 && this.y > 290 && game.mode === 1) {
+    if (keyCode === 32 && this.canJump() && game.mode === 1) {
       game.jumpSound.play();
     }
-    if (keyCode === 80) {
+    if (keyCode === 80 && game.mode === 1) {
       if (this.score > 0) {
         this.bullets.push(this.gun = new Shot())
         game.shotSound.setVolume(0.3);
-        game.shotSound.play();
+        playSound(game.shotSound);
         this.score--
       }
     }

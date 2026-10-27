@@ -1,10 +1,9 @@
-class firstAid {
+class FirstAid {
   constructor() {
     this.x = width;
     this.y = (Math.random() * height) / 2 + 150
     this.width = 40;
     this.height = 40;
-    this.image;
   }
   draw() {
     image(game.firstAidImage, this.x, this.y, this.width, this.height)
@@ -20,14 +19,9 @@ class firstAid {
       return false
     } else {
       if (!game.eatSound.isPlaying()) {
-        game.eatSound.play();
+        playSound(game.eatSound);
       }
-      if (game.player.health >= 130) {
-        game.player.health = 150;
-      }
-      if (game.player.health < 150) {
-        game.player.health += 30;
-      }
+      game.player.health = Math.min(150, game.player.health + 30);
       return true
     }
   }

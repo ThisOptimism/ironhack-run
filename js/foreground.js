@@ -2,7 +2,6 @@ class Foreground {
   constructor() {
     this.x = 0;
     this.x2 = 0;
-    this.turns = 0;
   }
   draw() {
     // Level #1
@@ -17,7 +16,6 @@ class Foreground {
       this.x -= 6;
       if (this.x <= -width) {
         this.x = 0
-        this.turns++
       }
     }
     // transition

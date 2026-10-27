@@ -1,11 +1,9 @@
 class Obstacles {
-  constructor(freq) {
-    this.freq = 1;
+  constructor() {
     this.x = width;
-    this.y = (Math.random() * height) / 2 + 150 * this.freq
+    this.y = (Math.random() * height) / 2 + 150
     this.width = 50;
     this.height = 50;
-    this.img;
   }
   collision(playerInfo) {
     const obstacleX = this.x + this.width / 2;

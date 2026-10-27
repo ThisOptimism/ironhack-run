@@ -1,4 +1,4 @@
-class Villan {
+class Villain {
   constructor() {
     this.x = 850;
     this.y = 370;
@@ -8,7 +8,6 @@ class Villan {
     this.health = 150;
     this.velocity = 0;
     this.gravity = 0.6;
-    this.villianIamge;
     this.speed = 0.5;
     this.bullets = [];
   }
@@ -20,8 +19,8 @@ class Villan {
     this.y += this.gravity;
     this.y = constrain(this.y, 0, height - this.height - 30);
     // health bar
-    this.healtBar();
-    image(game.villanImg, this.x, this.y, this.width, this.height)
+    this.healthBar();
+    image(game.villainImg, this.x, this.y, this.width, this.height)
 
     // move left - right
     this.x += this.speed;
@@ -36,21 +35,21 @@ class Villan {
       this.jump();
     }
     if (frameCount % 170 === 0) {
-      this.bullets.push(this.bullet = new ShotVillan())
+      this.bullets.push(this.bullet = new ShotVillain())
     }
 
   }
 
   getDamage() {
     game.player.bullets.forEach(bullet => {
-      const villanX = this.x + this.width / 2;
-      const villanY = this.y + this.height / 2;
+      const villainX = this.x + this.width / 2;
+      const villainY = this.y + this.height / 2;
       const bulletX = bullet.x + bullet.width / 2;
       const bulletY = bullet.y + bullet.height / 2;
-      if (dist(villanX + 10, villanY - 20, bulletX, bulletY) > 90) {
+      if (dist(villainX + 10, villainY - 20, bulletX, bulletY) > 90) {
         return false
       } else {
-        game.villanHurt.play();
+        playSound(game.villainHurt);
         this.health -= 10;
         game.player.bullets.splice(game.player.bullets.indexOf(bullet), 1)
         return true
@@ -58,7 +57,7 @@ class Villan {
     })
   }
 
-  healtBar() {
+  healthBar() {
 
     push()
     stroke('black')
@@ -73,7 +72,7 @@ class Villan {
     pop();
 
     push();
-    textSize('25');
+    textSize(25);
     text('FIGHT ELON', 435, 120);
     pop();
   }

@@ -8,7 +8,7 @@ class Game {
     this.foregroundImage;
     this.backgroundImagesEndgame;
     this.foregroundImageEndgame
-    this.villanImg;
+    this.villainImg;
     this.shotImg;
 
     this.coins = [];
@@ -36,7 +36,7 @@ class Game {
     this.shotSound;
     this.blopSound;
     this.eatSound;
-    this.villanHurt;
+    this.villainHurt;
     this.winnersong;
 
 
@@ -44,7 +44,7 @@ class Game {
   setup() {
     this.mode = 0
     this.player = new Player();
-    this.villan = new Villan();
+    this.villain = new Villain();
     this.background = new Background();
     this.foreground = new Foreground();
 
@@ -64,19 +64,13 @@ class Game {
     this.winnerCoin = loadImage('assets/images/winnercoin.png')
     this.teslaLogo = loadImage('assets/images/logotesla.png')
     this.teslaImg = loadImage('assets/images/tesla.png')
-    this.villanImg = loadImage('assets/images/elon.gif')
+    this.villainImg = loadImage('assets/images/elon.gif')
 
-    // sounds
-    this.shotSound = loadSound('assets/sound/shot.wav');
+    // small sounds needed right away
     this.coinSound = loadSound('assets/sound/coin.wav');
     this.gettingHitSound = loadSound('assets/sound/hit.wav');
     this.jumpSound = loadSound('assets/sound/jump.wav');
-    this.gameoverSound = loadSound('assets/sound/gameover.wav');
-    this.winnersong = loadSound('assets/sound/winnersong.mp3');
     this.blopSound = loadSound('assets/sound/blop.wav');
-    this.eatSound = loadSound('assets/sound/eat.wav');
-    this.villanHurt = loadSound('assets/sound/villanhurt.wav');
-    this.bossIntro = loadSound('assets/sound/bossintro.wav');
 
     // background images
     this.backgroundImages = [{
@@ -100,7 +94,7 @@ class Game {
         speed: 6 * this.gameSpeed
       }
     ]
-    // bachground Images Day
+    // background images night
     this.backgroundImagesNight = [{
         src: loadImage('assets/images/background/night/bg4.png'),
         x: 0,
@@ -150,9 +144,62 @@ class Game {
     ]
   }
 
+  // bigger sounds, loaded in the background from setup()
+  loadSounds() {
+    this.shotSound = loadSound('assets/sound/shot.wav');
+    this.gameoverSound = loadSound('assets/sound/gameover.wav');
+    this.winnersong = loadSound('assets/sound/winnersong.mp3');
+    this.eatSound = loadSound('assets/sound/eat.wav');
+    this.villainHurt = loadSound('assets/sound/villainhurt.wav');
+    this.bossIntro = loadSound('assets/sound/bossintro.m4a');
+  }
+
+  isOver() {
+    return this.player.health <= 0 || this.villain.health <= 0;
+  }
+
+  // start a new round without reloading the page (and all assets)
+  restart() {
+    this.setup();
+    this.mode = 1;
+    this.gameSpeed = 1;
+    this.obstacleFreq = 100;
+    this.obstacles = [];
+    this.coins = [];
+    this.firstAidArr = [];
+    this.teslaArr = [];
+    this.gameoverSoundCounter = 0;
+    [...this.backgroundImages, ...this.backgroundImagesNight, ...this.backgroundImagesEndgame].forEach(bgImg => {
+      bgImg.x = 0;
+    })
+    this.winnersong.stop();
+    this.bossIntro.stop();
+    this.gameoverSound.stop();
+    document.querySelector('.gameover').style.display = "none";
+    document.querySelector('.won').style.display = "none";
+    song.stop();
+    song.setVolume(0.6);
+    loopSound(song);
+    loop();
+  }
+
+  pauseMusic() {
+    song.pause();
+    this.bossIntro.pause();
+  }
+
+  resumeMusic() {
+    if (this.bossIntro.isPaused()) {
+      playSound(this.bossIntro);
+    } else if (!song.isPlaying()) {
+      song.setVolume(0.6);
+      loopSound(song);
+    }
+  }
+
   draw() {
     if (this.mode === 0) {
-      frameRate(0)
+      noLoop()
     }
 
     if (this.mode === 1) {
@@ -165,12 +212,16 @@ class Game {
       }
       if (this.player.level === 3) {
         this.gameSpeed = 1;
-        this.villan.draw();
+        this.villain.draw();
         this.obstacleFreq = 10000;
+        // back to the main song once the boss intro is over
+        if (!this.isOver() && !this.bossIntro.isPlaying() && !song.isPlaying()) {
+          loopSound(song);
+        }
       }
       this.player.draw();
       this.shoot();
-      this.villanShoot()
+      this.villainShoot()
       this.foreground.draw();
       this.player.healthBarDraw();
       this.player.scoreDraw();
@@ -185,7 +236,7 @@ class Game {
       this.player.healthBarDraw();
       this.levelStatusDraw();
       this.player.scoreDraw();
-      frameRate(0);
+      noLoop();
       textSize(32);
       text('– PAUSE –', 420, 300);
       textSize(16);
@@ -203,54 +254,55 @@ class Game {
       this.firstAidArr = [];
       this.teslaArr = [];
       this.player.bullets = [];
-      this.villan.bullets = [];
-      song.pause();
+      this.villain.bullets = [];
+      this.pauseMusic();
       if (!this.gameoverSound.isPlaying() && this.gameoverSoundCounter === 0) {
-        this.gameoverSound.play();
+        playSound(this.gameoverSound);
         this.gameoverSoundCounter++
       }
-      frameRate(0)
+      noLoop()
     }
   }
 
   winning() {
-    if (game.villan.health <= 0) {
+    if (game.villain.health <= 0) {
       document.querySelector('.won').style.display = "block";
       background('rgba(0, 0, 0, 0.4)');
       this.obstacles = [];
       this.firstAidArr = [];
       this.teslaArr = [];
-      this.villan.x = 1100;
-      this.coins.push(this.coin = new Coin);
-      game.villan.health = 0;
-      game.villan.bullets = [];
-      if (!this.winnersong.isPlaying()) {
-        this.winnersong.play();
+      this.villain.x = 1100;
+      if (frameCount % 10 === 0) {
+        this.coins.push(this.coin = new Coin);
       }
-      song.pause();
-      this.bossIntro.pause();
+      game.villain.health = 0;
+      game.villain.bullets = [];
+      if (!this.winnersong.isPlaying()) {
+        playSound(this.winnersong);
+      }
+      this.pauseMusic();
     }
   }
   shoot() {
     this.player.bullets.forEach(bullet => {
       bullet.draw();
     })
-    this.obstacles.forEach(obs => {
-      this.player.bullets = this.player.bullets.filter(bullet => {
-        if (bullet.collision(obs) || bullet.x > 1000) {
-          return false
-        } else {
-          return true;
-        }
-      })
+    this.player.bullets = this.player.bullets.filter(bullet => {
+      if (bullet.x > width) return false;
+      const target = this.obstacles.find(obs => bullet.collision(obs));
+      if (target) {
+        this.obstacles = this.obstacles.filter(obs => obs !== target);
+        return false;
+      }
+      return true;
     })
   }
 
-  villanShoot() {
-    this.villan.bullets.forEach(bullet => {
+  villainShoot() {
+    this.villain.bullets.forEach(bullet => {
       bullet.draw();
     })
-    this.villan.bullets = this.villan.bullets.filter(bullet => {
+    this.villain.bullets = this.villain.bullets.filter(bullet => {
       if (bullet.collision(this.player) || bullet.x < 0) {
         return false
       } else {
@@ -269,21 +321,20 @@ class Game {
       game.gameSpeed = 1.4;
       game.obstacleFreq = 110;
     }
-    if (this.background.turns === 60) {
-      if (!this.bossIntro.isPlaying()) {
-        this.bossIntro.play();
-      }
+    // turns stays at 60 for the rest of the game, so only switch to level 3 once
+    if (this.background.turns === 60 && this.player.level !== 3) {
+      song.pause();
+      playSound(this.bossIntro);
       this.gameSpeed = 1.2
       this.player.level = 3;
       this.player.moveLeftSpeed = 10;
       this.player.moveRightSpeed = 10;
-      song.pause();
     }
   }
 
   drawObstacles() {
     if (frameCount % this.obstacleFreq === 0) {
-      this.obstacles.push(this.obstacle = new Obstacles(1));
+      this.obstacles.push(this.obstacle = new Obstacles());
     }
     this.obstacles.forEach(obs => {
       obs.draw();
@@ -299,7 +350,7 @@ class Game {
 
   drawFirstAid() {
     if (frameCount % 834 === 0) {
-      this.firstAidArr.push(this.firstAid = new firstAid());
+      this.firstAidArr.push(this.firstAid = new FirstAid());
     }
     this.firstAidArr.forEach(firstAid => {
       firstAid.draw();
@@ -336,7 +387,7 @@ class Game {
       tesla.draw()
     })
     this.teslaArr = this.teslaArr.filter(tesla => {
-      if (tesla.collision(this.player)) {
+      if (tesla.collision(this.player) || tesla.x < -tesla.width) {
         return false
       } else {
         return true
