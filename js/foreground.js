@@ -17,11 +17,11 @@ class Foreground {
   update() {
     if (!this.scrolls) return;
 
-    this.animalX -= 7;
+    this.animalX -= 7 * game.gameSpeed;
     if (this.animalX <= -width - 2000) {
       this.animalX = 0
     }
-    this.x -= 6;
+    this.x -= 6 * game.gameSpeed;
     if (this.x <= -width) {
       this.x = 0
     }

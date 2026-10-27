@@ -11,7 +11,7 @@ class Background {
 
   update() {
     this.layers.forEach(layer => {
-      layer.x -= layer.speed
+      layer.x -= layer.speed * game.gameSpeed
       if (layer.x <= -width) {
         layer.x = 0;
         this.turns++
