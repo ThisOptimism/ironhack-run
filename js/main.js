@@ -31,7 +31,6 @@ function centersWithin(a, b, radius) {
 }
 
 function draw() {
-  clear();
   game.draw();
 }
 
@@ -47,6 +46,6 @@ function keyPressed() {
     game.mode = MODE.PLAYING;
     game.sounds.menuMusic.pause();
     game.resumeMusic();
-    loop();
+    game.frozen = false;
   }
 }

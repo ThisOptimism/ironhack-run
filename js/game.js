@@ -20,6 +20,7 @@ class Game {
   setup() {
     this.mode = MODE.MENU;
     this.roundOver = false;
+    this.frozen = false;
     this.obstacles = [];
     this.coins = [];
     this.firstAids = [];
@@ -89,7 +90,6 @@ class Game {
     this.sounds.music.stop();
     this.sounds.music.setVolume(0.6);
     loopSound(this.sounds.music);
-    loop();
   }
 
   pauseMusic() {
@@ -107,16 +107,17 @@ class Game {
   }
 
   draw() {
-    if (this.mode === MODE.MENU) {
-      noLoop();
-      return;
-    }
+    // The menu, pause and game over screens keep the last frame by not drawing at all.
+    // p5 keeps looping though: after noLoop()/loop(), animated GIFs freeze for as long
+    // as the game was stopped, because p5 times them off the frame clock.
+    if (this.mode === MODE.MENU || this.frozen) return;
+    clear();
     if (this.mode === MODE.PLAYING) {
       this.update();
     }
     this.render();
     if (this.mode === MODE.PAUSED) {
-      noLoop();
+      this.frozen = true;
       textSize(32);
       text('– PAUSE –', 420, 300);
       textSize(16);
@@ -206,7 +207,7 @@ class Game {
     if (this.player.health <= 0) {
       this.endRound('.gameover');
       playSound(this.sounds.gameOver);
-      noLoop();
+      this.frozen = true;
     } else if (this.villain.health <= 0) {
       this.endRound('.won');
     }
