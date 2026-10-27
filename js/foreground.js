@@ -1,45 +1,32 @@
 class Foreground {
   constructor() {
     this.x = 0;
-    this.x2 = 0;
+    this.animalX = 0;
   }
-  draw() {
-    // Level #1
-    if (game.background.turns < 30) {
-      image(game.dogImage, this.x2 + 400, 0, width, height);
-      image(game.foregroundImage, this.x, 0, width, height);
-      image(game.foregroundImage, this.x + width, 0, width, height);
-      this.x2 -= 7;
-      if (this.x2 <= -width - 2000) {
-        this.x2 = 0
-      }
-      this.x -= 6;
-      if (this.x <= -width) {
-        this.x = 0
-      }
-    }
-    // transition
-    // Level #2
-    if (game.background.turns >= 30 && game.background.turns < 60) {
-      image(game.catImage, this.x2 + 400, 0, width, height);
-      image(game.foregroundImageNight, this.x, 0, width, height)
-      image(game.foregroundImageNight, this.x + width, 0, width, height)
-      this.x -= 6;
-      if (this.x <= -width) {
-        this.x = 0
-      }
-      this.x2 -= 7;
-      if (this.x2 <= -width - 2000) {
-        this.x2 = 0
-      }
-    }
 
-    //  Level #3
-    if (game.background.turns >= 60) {
-      image(game.dogImage, this.x2 + 400, 0, width, height);
-      image(game.foregroundImageEndgame, this.x, 0, width, height);
-      image(game.foregroundImageEndgame, this.x + width, 0, width, height);
-      this.x2 = 0;
+  setLevel(art, scrolls) {
+    this.image = art.foreground;
+    this.animal = art.animal;
+    this.scrolls = scrolls;
+    if (!scrolls) {
+      this.x = 0;
+      this.animalX = 0;
+    }
+  }
+
+  draw() {
+    image(this.animal, this.animalX + 400, 0, width, height);
+    image(this.image, this.x, 0, width, height);
+    image(this.image, this.x + width, 0, width, height);
+    if (!this.scrolls) return;
+
+    this.animalX -= 7;
+    if (this.animalX <= -width - 2000) {
+      this.animalX = 0
+    }
+    this.x -= 6;
+    if (this.x <= -width) {
+      this.x = 0
     }
   }
 }

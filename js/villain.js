@@ -41,19 +41,16 @@ class Villain {
   }
 
   getDamage() {
-    game.player.bullets.forEach(bullet => {
-      const villainX = this.x + this.width / 2;
-      const villainY = this.y + this.height / 2;
-      const bulletX = bullet.x + bullet.width / 2;
-      const bulletY = bullet.y + bullet.height / 2;
-      if (dist(villainX + 10, villainY - 20, bulletX, bulletY) > 90) {
-        return false
-      } else {
+    // the hit area sits a bit above the center, around the head and body
+    const villainX = this.x + this.width / 2 + 10;
+    const villainY = this.y + this.height / 2 - 20;
+    game.player.bullets = game.player.bullets.filter(bullet => {
+      const hit = dist(villainX, villainY, bullet.x + bullet.width / 2, bullet.y + bullet.height / 2) <= 90;
+      if (hit) {
         playSound(game.villainHurt);
         this.health -= 10;
-        game.player.bullets.splice(game.player.bullets.indexOf(bullet), 1)
-        return true
       }
+      return !hit;
     })
   }
 

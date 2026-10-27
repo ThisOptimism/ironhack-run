@@ -2,12 +2,10 @@ class Game {
   constructor() {
     this.mode;
     this.gameSpeed = 1;
-    this.obstacleFreq = 100;
+    this.levelNumber = 1;
+    this.level = LEVELS[0];
+    this.levelArt = [];
     this.playerImage;
-    this.backgroundImages;
-    this.foregroundImage;
-    this.backgroundImagesEndgame;
-    this.foregroundImageEndgame
     this.villainImg;
     this.shotImg;
 
@@ -19,10 +17,10 @@ class Game {
     this.obstacles = [];
     this.obstacleImage;
 
-    this.firstAidArr = [];
+    this.firstAids = [];
     this.firstAidImage;
 
-    this.teslaArr = [];
+    this.teslas = [];
     this.teslaImg;
     this.teslaLogo;
     this.bossIntro;
@@ -31,15 +29,11 @@ class Game {
     this.gameoverSoundCounter = 0;
     this.jumpSound;
     this.gettingHitSound;
-    this.dogImage;
-    this.catImage;
     this.shotSound;
     this.blopSound;
     this.eatSound;
     this.villainHurt;
     this.winnersong;
-
-
   }
   setup() {
     this.mode = 0
@@ -47,7 +41,7 @@ class Game {
     this.villain = new Villain();
     this.background = new Background();
     this.foreground = new Foreground();
-
+    this.setLevel(1);
   }
   preload() {
     // images
@@ -56,11 +50,6 @@ class Game {
     this.shotImg = loadImage('assets/images/shot.png');
     this.firstAidImage = loadImage('assets/images/pizza.png');
     this.obstacleImage = loadImage('assets/images/coronavirus.png');
-    this.foregroundImage = loadImage('assets/images/background/day/fg1.png');
-    this.foregroundImageNight = loadImage('assets/images/background/night/fg1.png');
-    this.foregroundImageEndgame = loadImage('assets/images/background/endgame/fg1.png');
-    this.dogImage = loadImage('assets/images/background/day/dog.gif');
-    this.catImage = loadImage('assets/images/background/night/cat.gif');
     this.winnerCoin = loadImage('assets/images/winnercoin.png')
     this.teslaLogo = loadImage('assets/images/logotesla.png')
     this.teslaImg = loadImage('assets/images/tesla.png')
@@ -72,76 +61,17 @@ class Game {
     this.jumpSound = loadSound('assets/sound/jump.wav');
     this.blopSound = loadSound('assets/sound/blop.wav');
 
-    // background images
-    this.backgroundImages = [{
-        src: loadImage('assets/images/background/day/bg4.png'),
-        x: 0,
-        speed: 1 * this.gameSpeed
-      },
-      {
-        src: loadImage('assets/images/background/day/bg3.png'),
-        x: 0,
-        speed: 1.5 * this.gameSpeed
-      },
-      {
-        src: loadImage('assets/images/background/day/bg2.png'),
-        x: 0,
-        speed: 2 * this.gameSpeed
-      },
-      {
-        src: loadImage('assets/images/background/day/bg1.png'),
-        x: 0,
-        speed: 6 * this.gameSpeed
-      }
-    ]
-    // background images night
-    this.backgroundImagesNight = [{
-        src: loadImage('assets/images/background/night/bg4.png'),
-        x: 0,
-        speed: 1 * this.gameSpeed
-      },
-      {
-        src: loadImage('assets/images/background/night/bg3.png'),
-        x: 0,
-        speed: 1.5 * this.gameSpeed
-      },
-      {
-        src: loadImage('assets/images/background/night/bg2.png'),
-        x: 0,
-        speed: 2 * this.gameSpeed
-      },
-      {
-        src: loadImage('assets/images/background/night/bg1.png'),
-        x: 0,
-        speed: 6 * this.gameSpeed
-      }
-    ]
-
-    this.backgroundImagesEndgame = [{
-        src: loadImage('assets/images/background/endgame/bg5.png'),
-        x: 0,
-        speed: 0 * this.gameSpeed
-      }, {
-        src: loadImage('assets/images/background/endgame/bg4.png'),
-        x: 0,
-        speed: 1 * this.gameSpeed
-      },
-      {
-        src: loadImage('assets/images/background/endgame/bg3.png'),
-        x: 0,
-        speed: 0 * this.gameSpeed
-      },
-      {
-        src: loadImage('assets/images/background/endgame/bg2.png'),
-        x: 0,
-        speed: 0 * this.gameSpeed
-      },
-      {
-        src: loadImage('assets/images/background/endgame/bg1.png'),
-        x: 0,
-        speed: 0 * this.gameSpeed
-      }
-    ]
+    // background, foreground and animal for each level
+    const images = {};
+    const load = path => images[path] = images[path] || loadImage(path);
+    this.levelArt = LEVELS.map(level => {
+      const folder = `assets/images/background/${level.folder}`;
+      return {
+        layers: level.layers.map(layer => ({ img: load(`${folder}/${layer.file}`), speed: layer.speed })),
+        foreground: load(`${folder}/fg1.png`),
+        animal: load(level.animal)
+      };
+    })
   }
 
   // bigger sounds, loaded in the background from setup()
@@ -154,6 +84,20 @@ class Game {
     this.bossIntro = loadSound('assets/sound/bossintro.m4a');
   }
 
+  setLevel(number) {
+    this.levelNumber = number;
+    this.level = LEVELS[number - 1];
+    this.gameSpeed = this.level.gameSpeed;
+    this.player.moveLeftSpeed = this.level.playerSpeed.left;
+    this.player.moveRightSpeed = this.level.playerSpeed.right;
+    this.background.setLevel(this.levelArt[number - 1]);
+    this.foreground.setLevel(this.levelArt[number - 1], this.level.foregroundScrolls);
+    if (this.level.boss) {
+      song.pause();
+      playSound(this.bossIntro);
+    }
+  }
+
   isOver() {
     return this.player.health <= 0 || this.villain.health <= 0;
   }
@@ -162,16 +106,11 @@ class Game {
   restart() {
     this.setup();
     this.mode = 1;
-    this.gameSpeed = 1;
-    this.obstacleFreq = 100;
     this.obstacles = [];
     this.coins = [];
-    this.firstAidArr = [];
-    this.teslaArr = [];
+    this.firstAids = [];
+    this.teslas = [];
     this.gameoverSoundCounter = 0;
-    [...this.backgroundImages, ...this.backgroundImagesNight, ...this.backgroundImagesEndgame].forEach(bgImg => {
-      bgImg.x = 0;
-    })
     this.winnersong.stop();
     this.bossIntro.stop();
     this.gameoverSound.stop();
@@ -203,17 +142,18 @@ class Game {
     }
 
     if (this.mode === 1) {
+      const spawn = this.level.spawn;
       this.background.draw()
-      this.drawFirstAid()
-      this.drawObstacles();
-      this.drawCoin();
-      if (this.player.level > 1) {
-        this.drawTesla();
-      }
-      if (this.player.level === 3) {
-        this.gameSpeed = 1;
+      this.spawnEvery(spawn.firstAid, this.firstAids, FirstAid);
+      this.firstAids = this.updateEntities(this.firstAids);
+      this.spawnEvery(spawn.obstacle, this.obstacles, Obstacle);
+      this.obstacles = this.updateEntities(this.obstacles);
+      this.spawnEvery(spawn.coin, this.coins, Coin);
+      this.coins = this.updateEntities(this.coins);
+      this.spawnEvery(spawn.tesla, this.teslas, Tesla);
+      this.teslas = this.updateEntities(this.teslas);
+      if (this.level.boss) {
         this.villain.draw();
-        this.obstacleFreq = 10000;
         // back to the main song once the boss intro is over
         if (!this.isOver() && !this.bossIntro.isPlaying() && !song.isPlaying()) {
           loopSound(song);
@@ -221,15 +161,16 @@ class Game {
       }
       this.player.draw();
       this.shoot();
-      this.villainShoot()
+      this.villain.bullets = this.updateEntities(this.villain.bullets);
       this.foreground.draw();
       this.player.healthBarDraw();
       this.player.scoreDraw();
       this.levelStatusDraw();
+      this.checkLevelUp();
       this.gameover();
       this.winning();
     }
-    // pause mode 
+    // pause mode
     if (this.mode === 2) {
       this.background.draw();
       this.foreground.draw();
@@ -244,15 +185,34 @@ class Game {
     }
   }
 
+  spawnEvery(frames, list, EntityClass) {
+    if (frames && frameCount % frames === 0) {
+      list.push(new EntityClass());
+    }
+  }
+
+  // move and draw everything in the list, then drop what hit the player or left the screen
+  updateEntities(list) {
+    list.forEach(entity => {
+      entity.draw();
+    })
+    return list.filter(entity => {
+      if (entity.hitRadius && centersWithin(entity, this.player, entity.hitRadius)) {
+        entity.hitPlayer(this.player);
+        return false
+      }
+      return entity.x > -entity.width
+    })
+  }
+
   gameover() {
     if (this.player.health <= 0) {
       document.querySelector('.gameover').style.display = "block";
       background('rgba(0, 0, 0, 0.4)')
-      this.player.health = 0;
       this.obstacles = [];
       this.coins = [];
-      this.firstAidArr = [];
-      this.teslaArr = [];
+      this.firstAids = [];
+      this.teslas = [];
       this.player.bullets = [];
       this.villain.bullets = [];
       this.pauseMusic();
@@ -269,11 +229,11 @@ class Game {
       document.querySelector('.won').style.display = "block";
       background('rgba(0, 0, 0, 0.4)');
       this.obstacles = [];
-      this.firstAidArr = [];
-      this.teslaArr = [];
+      this.firstAids = [];
+      this.teslas = [];
       this.villain.x = 1100;
       if (frameCount % 10 === 0) {
-        this.coins.push(this.coin = new Coin);
+        this.coins.push(new WinnerCoin());
       }
       game.villain.health = 0;
       game.villain.bullets = [];
@@ -289,8 +249,10 @@ class Game {
     })
     this.player.bullets = this.player.bullets.filter(bullet => {
       if (bullet.x > width) return false;
-      const target = this.obstacles.find(obs => bullet.collision(obs));
+      const target = this.obstacles.find(obs => centersWithin(bullet, obs, bullet.hitRadius));
       if (target) {
+        game.blopSound.setVolume(0.4);
+        game.blopSound.play();
         this.obstacles = this.obstacles.filter(obs => obs !== target);
         return false;
       }
@@ -298,100 +260,16 @@ class Game {
     })
   }
 
-  villainShoot() {
-    this.villain.bullets.forEach(bullet => {
-      bullet.draw();
-    })
-    this.villain.bullets = this.villain.bullets.filter(bullet => {
-      if (bullet.collision(this.player) || bullet.x < 0) {
-        return false
-      } else {
-        return true;
-      }
-    })
-  }
-
   levelStatusDraw() {
     push();
     fill('black');
-    text(`LEVEL ${this.player.level}`, 460, 50);
+    text(`LEVEL ${this.levelNumber}`, 460, 50);
     pop();
-    if (this.background.turns === 30) {
-      game.player.level = 2;
-      game.gameSpeed = 1.4;
-      game.obstacleFreq = 110;
-    }
-    // turns stays at 60 for the rest of the game, so only switch to level 3 once
-    if (this.background.turns === 60 && this.player.level !== 3) {
-      song.pause();
-      playSound(this.bossIntro);
-      this.gameSpeed = 1.2
-      this.player.level = 3;
-      this.player.moveLeftSpeed = 10;
-      this.player.moveRightSpeed = 10;
-    }
   }
 
-  drawObstacles() {
-    if (frameCount % this.obstacleFreq === 0) {
-      this.obstacles.push(this.obstacle = new Obstacles());
+  checkLevelUp() {
+    if (this.level.turns && this.background.turns >= this.level.turns) {
+      this.setLevel(this.levelNumber + 1);
     }
-    this.obstacles.forEach(obs => {
-      obs.draw();
-    })
-    this.obstacles = this.obstacles.filter(obstacle => {
-      if (obstacle.collision(this.player) || obstacle.x < 0) {
-        return false
-      } else {
-        return true
-      }
-    })
-  }
-
-  drawFirstAid() {
-    if (frameCount % 834 === 0) {
-      this.firstAidArr.push(this.firstAid = new FirstAid());
-    }
-    this.firstAidArr.forEach(firstAid => {
-      firstAid.draw();
-    })
-    this.firstAidArr = this.firstAidArr.filter(firstAid => {
-      if (firstAid.collision(this.player) || firstAid.x < 0) {
-        return false
-      } else {
-        return true
-      }
-    })
-  }
-
-  drawCoin() {
-    if (frameCount % 181 === 0) {
-      this.coins.push(this.coin = new Coin());
-    }
-    this.coins.forEach(coin => {
-      coin.draw();
-    })
-    this.coins = this.coins.filter(coin => {
-      if (coin.collision(this.player) || coin.x < 0) {
-        return false
-      } else {
-        return true
-      }
-    })
-  }
-  drawTesla() {
-    if (frameCount % 247 === 0) {
-      this.teslaArr.push(this.tesla = new Tesla());
-    }
-    this.teslaArr.forEach(tesla => {
-      tesla.draw()
-    })
-    this.teslaArr = this.teslaArr.filter(tesla => {
-      if (tesla.collision(this.player) || tesla.x < -tesla.width) {
-        return false
-      } else {
-        return true
-      }
-    })
   }
 }

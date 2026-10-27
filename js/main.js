@@ -30,6 +30,11 @@ function loopSound(sound) {
   if (sound.isLoaded()) sound.loop();
 }
 
+// true when the centers of a and b are at most `radius` apart
+function centersWithin(a, b, radius) {
+  return dist(a.x + a.width / 2, a.y + a.height / 2, b.x + b.width / 2, b.y + b.height / 2) <= radius;
+}
+
 function draw() {
   clear();
   game.draw();

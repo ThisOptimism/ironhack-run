@@ -1,3 +1,5 @@
+const MAX_HEALTH = 150;
+
 class Player {
   constructor() {
     this.x = 30;
@@ -5,8 +7,7 @@ class Player {
     this.height = 200;
     this.width = 100;
     this.score = 0;
-    this.health = 150;
-    this.level = 1;
+    this.health = MAX_HEALTH;
     this.gravity = 0.6;
     this.velocity = 0;
     this.bullets = [];
@@ -45,7 +46,7 @@ class Player {
     push()
     noStroke()
     fill('rgb(0,255,0)')
-    rect(21, 31, this.health - 2, 18)
+    rect(21, 31, (this.health / MAX_HEALTH) * 148, 18)
     pop()
 
     // red cross
@@ -55,6 +56,12 @@ class Player {
     rect(190, 30, 6, 20)
     rect(183, 37.5, 20, 6)
     pop()
+  }
+  takeDamage(amount) {
+    this.health = Math.max(0, this.health - amount);
+  }
+  heal(amount) {
+    this.health = Math.min(MAX_HEALTH, this.health + amount);
   }
   moveLeft() {
     this.x -= this.moveLeftSpeed * game.gameSpeed / 1.5
