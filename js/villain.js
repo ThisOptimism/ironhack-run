@@ -5,22 +5,19 @@ class Villain {
     this.width = 100;
     this.height = 200;
     this.damage = 20;
-    this.health = 150;
+    this.health = MAX_HEALTH;
     this.velocity = 0;
     this.gravity = 0.6;
     this.speed = 0.5;
     this.bullets = [];
   }
 
-  draw() {
+  update() {
     // gravity
     this.velocity += this.gravity;
     this.y += this.velocity;
     this.y += this.gravity;
-    this.y = constrain(this.y, 0, height - this.height - 30);
-    // health bar
-    this.healthBar();
-    image(game.villainImg, this.x, this.y, this.width, this.height)
+    this.y = constrain(this.y, 0, height - this.height - GROUND_MARGIN);
 
     // move left - right
     this.x += this.speed;
@@ -35,9 +32,13 @@ class Villain {
       this.jump();
     }
     if (frameCount % 170 === 0) {
-      this.bullets.push(this.bullet = new ShotVillain())
+      this.bullets.push(new ShotVillain())
     }
+  }
 
+  draw() {
+    this.healthBar();
+    image(game.villainImg, this.x, this.y, this.width, this.height)
   }
 
   getDamage() {
@@ -65,7 +66,7 @@ class Villain {
     push();
     noStroke();
     fill('rgb(0,255,0)');
-    rect(this.x + 1 - 25, this.y - 20, this.health - 2, 10);
+    rect(this.x + 1 - 25, this.y - 20, (this.health / MAX_HEALTH) * 148, 10);
     pop();
 
     push();

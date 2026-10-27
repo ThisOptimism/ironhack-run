@@ -11,8 +11,10 @@ class Obstacle {
     game.gettingHitSound.play();
     player.takeDamage(20);
   }
+  update() {
+    this.x -= 11 * game.gameSpeed;
+  }
   draw() {
     image(game.obstacleImage, this.x, this.y, this.width, this.height);
-    this.x -= 11 * game.gameSpeed;
   }
 }

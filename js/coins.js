@@ -6,9 +6,11 @@ class Coin {
     this.height = 27;
     this.hitRadius = 80;
   }
+  update() {
+    this.x -= 5 * game.gameSpeed;
+  }
   draw() {
     image(game.coinImage, this.x, this.y, this.width, this.height)
-    this.x -= 5 * game.gameSpeed;
   }
   hitPlayer(player) {
     player.score += 5;
@@ -25,8 +27,10 @@ class WinnerCoin {
     this.width = 36;
     this.height = 27;
   }
+  update() {
+    this.x -= 10 * game.gameSpeed;
+  }
   draw() {
     image(game.winnerCoin, this.x, this.y, this.width, this.height)
-    this.x -= 10 * game.gameSpeed;
   }
 }

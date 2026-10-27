@@ -6,9 +6,11 @@ class FirstAid {
     this.height = 40;
     this.hitRadius = 100;
   }
+  update() {
+    this.x -= 10
+  }
   draw() {
     image(game.firstAidImage, this.x, this.y, this.width, this.height)
-    this.x -= 10
   }
   hitPlayer(player) {
     if (!game.eatSound.isPlaying()) {

@@ -1,5 +1,3 @@
-const MAX_HEALTH = 150;
-
 class Player {
   constructor() {
     this.x = 30;
@@ -15,16 +13,19 @@ class Player {
     this.moveLeftSpeed = 13;
   }
 
-  draw() {
-    if (keyIsDown(65) && this.x >= 5) this.moveLeft();
-    if (keyIsDown(68) && this.x <= 900) this.moveRight();
-    if (keyIsDown(32)) this.jump();
+  update() {
+    if (keyIsDown(KEY.A) && this.x >= 5) this.moveLeft();
+    if (keyIsDown(KEY.D) && this.x <= width - this.width) this.moveRight();
+    if (keyIsDown(KEY.SPACE)) this.jump();
 
     //  gravity
     this.velocity += this.gravity;
     this.y += this.velocity;
     this.y += this.gravity
-    this.y = constrain(this.y, 0, height - this.height - 30)
+    this.y = constrain(this.y, 0, this.groundY())
+  }
+
+  draw() {
     image(game.playerImage, this.x, this.y, this.width, this.height)
   }
 
@@ -69,20 +70,23 @@ class Player {
   moveRight() {
     this.x += this.moveRightSpeed * game.gameSpeed / 1.5
   }
+  groundY() {
+    return height - this.height - GROUND_MARGIN;
+  }
   canJump() {
-    return this.y > 360;
+    return this.y > this.groundY() - 10;
   }
   jump() {
     if (this.canJump())
       this.velocity = -19;
   }
   keyIsPressed() {
-    if (keyCode === 32 && this.canJump() && game.mode === 1) {
+    if (keyCode === KEY.SPACE && this.canJump() && game.mode === MODE.PLAYING) {
       game.jumpSound.play();
     }
-    if (keyCode === 80 && game.mode === 1) {
+    if (keyCode === KEY.P && game.mode === MODE.PLAYING) {
       if (this.score > 0) {
-        this.bullets.push(this.gun = new Shot())
+        this.bullets.push(new Shot())
         game.shotSound.setVolume(0.3);
         playSound(game.shotSound);
         this.score--

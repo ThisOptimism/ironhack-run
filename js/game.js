@@ -26,7 +26,6 @@ class Game {
     this.bossIntro;
 
     this.gameoverSound;
-    this.gameoverSoundCounter = 0;
     this.jumpSound;
     this.gettingHitSound;
     this.shotSound;
@@ -36,7 +35,12 @@ class Game {
     this.winnersong;
   }
   setup() {
-    this.mode = 0
+    this.mode = MODE.MENU
+    this.roundOver = false;
+    this.obstacles = [];
+    this.coins = [];
+    this.firstAids = [];
+    this.teslas = [];
     this.player = new Player();
     this.villain = new Villain();
     this.background = new Background();
@@ -105,12 +109,7 @@ class Game {
   // start a new round without reloading the page (and all assets)
   restart() {
     this.setup();
-    this.mode = 1;
-    this.obstacles = [];
-    this.coins = [];
-    this.firstAids = [];
-    this.teslas = [];
-    this.gameoverSoundCounter = 0;
+    this.mode = MODE.PLAYING;
     this.winnersong.stop();
     this.bossIntro.stop();
     this.gameoverSound.stop();
@@ -137,51 +136,68 @@ class Game {
   }
 
   draw() {
-    if (this.mode === 0) {
+    if (this.mode === MODE.MENU) {
       noLoop()
+      return
     }
-
-    if (this.mode === 1) {
-      const spawn = this.level.spawn;
-      this.background.draw()
-      this.spawnEvery(spawn.firstAid, this.firstAids, FirstAid);
-      this.firstAids = this.updateEntities(this.firstAids);
-      this.spawnEvery(spawn.obstacle, this.obstacles, Obstacle);
-      this.obstacles = this.updateEntities(this.obstacles);
-      this.spawnEvery(spawn.coin, this.coins, Coin);
-      this.coins = this.updateEntities(this.coins);
-      this.spawnEvery(spawn.tesla, this.teslas, Tesla);
-      this.teslas = this.updateEntities(this.teslas);
-      if (this.level.boss) {
-        this.villain.draw();
-        // back to the main song once the boss intro is over
-        if (!this.isOver() && !this.bossIntro.isPlaying() && !song.isPlaying()) {
-          loopSound(song);
-        }
-      }
-      this.player.draw();
-      this.shoot();
-      this.villain.bullets = this.updateEntities(this.villain.bullets);
-      this.foreground.draw();
-      this.player.healthBarDraw();
-      this.player.scoreDraw();
-      this.levelStatusDraw();
-      this.checkLevelUp();
-      this.gameover();
-      this.winning();
+    if (this.mode === MODE.PLAYING) {
+      this.update();
     }
-    // pause mode
-    if (this.mode === 2) {
-      this.background.draw();
-      this.foreground.draw();
-      this.player.healthBarDraw();
-      this.levelStatusDraw();
-      this.player.scoreDraw();
+    this.render();
+    if (this.mode === MODE.PAUSED) {
       noLoop();
       textSize(32);
       text('– PAUSE –', 420, 300);
       textSize(16);
       text('Press "Enter" to resume', 417, 335)
+    }
+  }
+
+  // move everything, handle hits and decide what happens next
+  update() {
+    const spawn = this.level.spawn;
+    this.background.update();
+    this.spawnEvery(spawn.firstAid, this.firstAids, FirstAid);
+    this.firstAids = this.updateEntities(this.firstAids);
+    this.spawnEvery(spawn.obstacle, this.obstacles, Obstacle);
+    this.obstacles = this.updateEntities(this.obstacles);
+    this.spawnEvery(spawn.coin, this.coins, Coin);
+    this.coins = this.updateEntities(this.coins);
+    this.spawnEvery(spawn.tesla, this.teslas, Tesla);
+    this.teslas = this.updateEntities(this.teslas);
+    if (this.level.boss && !this.roundOver) {
+      this.villain.update();
+      // back to the main song once the boss intro is over
+      if (!this.bossIntro.isPlaying() && !song.isPlaying()) {
+        loopSound(song);
+      }
+    }
+    this.player.update();
+    this.updatePlayerBullets();
+    this.villain.bullets = this.updateEntities(this.villain.bullets);
+    this.foreground.update();
+    this.checkLevelUp();
+    this.checkRoundOver();
+  }
+
+  // draw everything back to front, without changing any state
+  render() {
+    this.background.draw();
+    [this.firstAids, this.obstacles, this.coins, this.teslas].forEach(list => {
+      list.forEach(entity => entity.draw());
+    })
+    if (this.level.boss && !this.roundOver) {
+      this.villain.draw();
+    }
+    this.player.draw();
+    this.player.bullets.forEach(bullet => bullet.draw());
+    this.villain.bullets.forEach(bullet => bullet.draw());
+    this.foreground.draw();
+    this.player.healthBarDraw();
+    this.player.scoreDraw();
+    this.levelStatusDraw();
+    if (this.roundOver) {
+      background('rgba(0, 0, 0, 0.4)');
     }
   }
 
@@ -191,10 +207,10 @@ class Game {
     }
   }
 
-  // move and draw everything in the list, then drop what hit the player or left the screen
+  // move everything in the list, then drop what hit the player or left the screen
   updateEntities(list) {
     list.forEach(entity => {
-      entity.draw();
+      entity.update();
     })
     return list.filter(entity => {
       if (entity.hitRadius && centersWithin(entity, this.player, entity.hitRadius)) {
@@ -205,47 +221,41 @@ class Game {
     })
   }
 
-  gameover() {
-    if (this.player.health <= 0) {
-      document.querySelector('.gameover').style.display = "block";
-      background('rgba(0, 0, 0, 0.4)')
-      this.obstacles = [];
-      this.coins = [];
-      this.firstAids = [];
-      this.teslas = [];
-      this.player.bullets = [];
-      this.villain.bullets = [];
-      this.pauseMusic();
-      if (!this.gameoverSound.isPlaying() && this.gameoverSoundCounter === 0) {
-        playSound(this.gameoverSound);
-        this.gameoverSoundCounter++
-      }
-      noLoop()
-    }
-  }
-
-  winning() {
-    if (game.villain.health <= 0) {
-      document.querySelector('.won').style.display = "block";
-      background('rgba(0, 0, 0, 0.4)');
-      this.obstacles = [];
-      this.firstAids = [];
-      this.teslas = [];
-      this.villain.x = 1100;
+  checkRoundOver() {
+    if (this.roundOver) {
+      // after a win the game keeps running for the coin rain
       if (frameCount % 10 === 0) {
         this.coins.push(new WinnerCoin());
       }
-      game.villain.health = 0;
-      game.villain.bullets = [];
       if (!this.winnersong.isPlaying()) {
         playSound(this.winnersong);
       }
-      this.pauseMusic();
+      return
+    }
+    if (this.player.health <= 0) {
+      this.endRound('.gameover');
+      playSound(this.gameoverSound);
+      noLoop()
+    } else if (this.villain.health <= 0) {
+      this.endRound('.won');
     }
   }
-  shoot() {
+
+  endRound(overlay) {
+    this.roundOver = true;
+    document.querySelector(overlay).style.display = "block";
+    this.obstacles = [];
+    this.coins = [];
+    this.firstAids = [];
+    this.teslas = [];
+    this.player.bullets = [];
+    this.villain.bullets = [];
+    this.pauseMusic();
+  }
+
+  updatePlayerBullets() {
     this.player.bullets.forEach(bullet => {
-      bullet.draw();
+      bullet.update();
     })
     this.player.bullets = this.player.bullets.filter(bullet => {
       if (bullet.x > width) return false;

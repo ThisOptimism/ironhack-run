@@ -9,15 +9,20 @@ class Background {
     this.turns = 0;
   }
 
-  draw() {
+  update() {
     this.layers.forEach(layer => {
       layer.x -= layer.speed
-      image(layer.img, layer.x, 0, width, height)
-      image(layer.img, layer.x + width, 0, width, height)
       if (layer.x <= -width) {
         layer.x = 0;
         this.turns++
       }
+    })
+  }
+
+  draw() {
+    this.layers.forEach(layer => {
+      image(layer.img, layer.x, 0, width, height)
+      image(layer.img, layer.x + width, 0, width, height)
     })
   }
 }

@@ -7,9 +7,11 @@ class ShotVillain {
     this.damage = 20;
     this.hitRadius = 50;
   }
+  update() {
+    this.x -= 17
+  }
   draw() {
     image(game.teslaLogo, this.x, this.y, this.width, this.height)
-    this.x -= 17
   }
   hitPlayer(player) {
     player.takeDamage(this.damage);

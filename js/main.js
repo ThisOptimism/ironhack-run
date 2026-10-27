@@ -10,7 +10,7 @@ function setup() {
 
   // music is big, so it loads in the background instead of blocking the first frame
   menuSong = loadSound("assets/sound/song1.m4a", () => {
-    if (game.mode === 0) menuSong.loop();
+    if (game.mode === MODE.MENU) menuSong.loop();
   });
   song = loadSound("assets/sound/song.mp3");
   game.loadSounds();
@@ -42,13 +42,14 @@ function draw() {
 
 function keyPressed() {
   game.player.keyIsPressed();
-  if (keyCode === 27 && game.mode == 1) {
-    game.mode = 2;
+  if (keyCode === ESCAPE && game.mode === MODE.PLAYING) {
+    game.mode = MODE.PAUSED;
     game.pauseMusic();
   }
 
   if (keyCode === ENTER && !game.isOver()) {
-    game.mode = 1
+    document.querySelector('.menu').style.display = "none";
+    game.mode = MODE.PLAYING
     menuSong.pause();
     game.resumeMusic();
     loop()

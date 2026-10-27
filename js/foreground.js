@@ -14,10 +14,7 @@ class Foreground {
     }
   }
 
-  draw() {
-    image(this.animal, this.animalX + 400, 0, width, height);
-    image(this.image, this.x, 0, width, height);
-    image(this.image, this.x + width, 0, width, height);
+  update() {
     if (!this.scrolls) return;
 
     this.animalX -= 7;
@@ -28,5 +25,11 @@ class Foreground {
     if (this.x <= -width) {
       this.x = 0
     }
+  }
+
+  draw() {
+    image(this.animal, this.animalX + 400, 0, width, height);
+    image(this.image, this.x, 0, width, height);
+    image(this.image, this.x + width, 0, width, height);
   }
 }
